@@ -7,37 +7,33 @@
 
 import Foundation
 
+//MARK: - 루틴 데이터
 struct RoutineData {
-    //루틴 식별자 타입은 이후 설정 (임의로 String 타입)
+    
+    //루틴 식별자 타입 (임의로 String 타입)
     var identifier: String
     
-    var color: RoutineBoardColor
+    //루틴 보드 색
+    var boardColor: RoutineBoardColor
     
+    //루틴 이름
     var title: String
     
-    var sticker: String
+    //스티커
+    var sticker: RoutineSticker
     
+    //반복 주기
     var repetitionPeriod: any RepetitionSchedule
     
+    //알림 여부
     var isNotice: Bool = false
     
+    //알림
     var notice: RoutineNotification?
     
+    //중단여부
     var willStop: Bool = false
     
+    //중단일자
     var stopDate: Date?
-
 }
-
-// 임의의 색으로 설정, 이후 논의 필요사항
-enum RoutineBoardColor {
-    case red
-    case orange
-    case yellow
-    case green
-    case blue
-    case purple
-    case white
-    case black
-}
-
