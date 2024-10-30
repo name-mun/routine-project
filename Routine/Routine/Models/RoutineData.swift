@@ -29,6 +29,7 @@ struct RoutineData {
 
 }
 
+// 임의의 색으로 설정, 이후 논의 필요사항
 enum RoutineBoardColor {
     case red
     case orange
@@ -38,10 +39,5 @@ enum RoutineBoardColor {
     case purple
     case white
     case black
-}
-
-
-struct RoutineNotification {
-    
 }
 

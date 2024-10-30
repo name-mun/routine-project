@@ -10,9 +10,9 @@ import Foundation
 //MARK: - 반복주기 프로토콜
 protocol RepetitionSchedule {
     
-    associatedtype TimeUnit
+    associatedtype TimeUnit: Hashable
     
-    var schedule: [TimeUnit] { get set }
+    var schedule: Set<TimeUnit> { get set }
     
     //반복주기에 부합하는 날짜인지 검증하는 메서드
     func isScheduledFor(_ date: Date) -> Bool
@@ -27,7 +27,7 @@ struct WeeklySchedule: RepetitionSchedule {
     
     typealias TimeUnit = Self.DayOfWeek
     
-    var schedule: [TimeUnit]
+    var schedule: Set<TimeUnit>
         
     func isScheduledFor(_ date: Date) -> Bool {
         guard let weeklyDay = DayOfWeek(date: date) else { return false }
@@ -35,7 +35,7 @@ struct WeeklySchedule: RepetitionSchedule {
         return self.schedule.contains(weeklyDay)
     }
     
-    enum DayOfWeek: Int {
+    enum DayOfWeek: Int, Hashable {
         case sunday = 1
         case monday
         case tuesday
@@ -46,11 +46,11 @@ struct WeeklySchedule: RepetitionSchedule {
         
         init?(date: Date) {
             
-            let weeklyDayIndex = Calendar.current.component(.weekday, from: date)
+            let dayOfWeekIndex = Calendar.current.component(.weekday, from: date)
             
-            guard let weeklyDay = DayOfWeek.init(rawValue: weeklyDayIndex) else { return nil }
+            guard let dayOfWeek = DayOfWeek.init(rawValue: dayOfWeekIndex) else { return nil }
             
-            self = weeklyDay
+            self = dayOfWeek
         }
     }
 }
@@ -61,7 +61,7 @@ struct MonthlySchedule: RepetitionSchedule {
     
     typealias TimeUnit = Self.DayOfMonth
     
-    var schedule: [TimeUnit]
+    var schedule: Set<TimeUnit>
     
     func isScheduledFor(_ date: Date) -> Bool {
         guard let monthlyDay = DayOfMonth(date: date) else { return false }
@@ -69,7 +69,7 @@ struct MonthlySchedule: RepetitionSchedule {
         return self.schedule.contains(monthlyDay)
     }
     
-    enum DayOfMonth: Int {
+    enum DayOfMonth: Int, Hashable {
         case day1 = 1
         case day2, day3, day4, day5, day6,
              day7, day8, day9, day10, day11,
@@ -81,11 +81,11 @@ struct MonthlySchedule: RepetitionSchedule {
         
         init?(date: Date) {
             
-            let monthlyDayIndex = Calendar.current.component(.day, from: date)
+            let dayOfMonthIndex = Calendar.current.component(.day, from: date)
             
-            guard let monthlyDay = DayOfMonth.init(rawValue: monthlyDayIndex) else { return nil }
+            guard let dayOfMonth = DayOfMonth.init(rawValue: dayOfMonthIndex) else { return nil }
             
-            self = monthlyDay
+            self = dayOfMonth
         }
     }
 }
