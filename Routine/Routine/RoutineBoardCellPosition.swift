@@ -32,34 +32,49 @@ extension RoutineBoardCollectionViewCell {
     
     let role: Role
     let line: Line
-    let row: Row
+//    let row: Row
     
     init(dataCount: Int, index: Int) {
       self.role = Role(dataCount: dataCount, index: index)
       self.line = Line(index)
-      self.row = Row(index)
     }
     
     //마스크 코너 반환
     func maskedCorner() -> CACornerMask {
-      
       switch role {
       case .first:
         return [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         
       case .normal:
-        switch (line, row) {
-        case (.odd, .first): return [.layerMinXMaxYCorner]
-        case (.odd, .third): return [.layerMaxXMinYCorner]
-        case (.even, .first): return [.layerMaxXMaxYCorner]
-        case (.even, .third): return [.layerMinXMinYCorner]
-        default: return []
+        switch line {
+        case .even(.first):
+          return [.layerMaxXMaxYCorner]
+          
+        case .even(.third):
+          return [.layerMinXMinYCorner]
+          
+        case .odd(.first):
+          return [.layerMinXMaxYCorner]
+          
+        case .odd(.third):
+          return [.layerMaxXMinYCorner]
+          
+        default:
+          return []
         }
         
+        
       case .last:
-        if row == .first { return [] }
-        else if line == .odd { return [.layerMaxXMinYCorner] }
-        else { return [.layerMinXMinYCorner] }
+        switch line {
+        case .even(.first), .odd(.first):
+          return []
+          
+        case .odd(.second), .odd(.third):
+          return [.layerMaxXMinYCorner]
+          
+        default:
+          return [.layerMinXMinYCorner]
+        }
       }
     }
     
@@ -83,12 +98,13 @@ extension RoutineBoardCollectionViewCell {
     
     //홀수 짝수 줄
     enum Line {
-      case odd
-      case even
+      case odd(Row)
+      case even(Row)
       
       init(_ index: Int) {
-        let line = index/3
-        self = (line % 2 == 0) ? .odd : .even
+        let row = Row(index)
+        let line = index / 3 % 2
+        self = (line == 0) ? .odd(row) : .even(row)
       }
     }
     
