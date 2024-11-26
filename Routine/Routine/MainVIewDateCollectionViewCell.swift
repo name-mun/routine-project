@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import Then
 
-class MainVIewDateCollectionViewCell:
 //Data 저장형식 선정
 /*
  MARK: - Data 저장형식 선정
@@ -21,6 +20,69 @@ class MainVIewDateCollectionViewCell:
  MARK: - 3.Key Chains
  
  */
+
+//MARK: - MainDateCollectionViewCell
+
+class MainDateCollectionViewCell: UICollectionViewCell {
+  
+  //루틴 실행 결과 반영 필요.
+  private var date: Date?
+  
+  private let dateButton = UIButton().then { button in
+//    button.alig = .center
+    button.backgroundColor = .white
+    button.contentMode = .scaleAspectFit
+  }
+  
+  private let dateLabel = UILabel().then { label in
+    label.text = "0"
+    label.textColor = .black
+    label.backgroundColor = .white
+    label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+  }
+  
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    
+    setUpUI()
+  }
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    
+    setUpUI()
+  }
+  
+  func setDate(_ date: Date) {
+    self.date = date
+  }
+  
+}
+
+//MARK: - Set Up UI
+
+extension MainDateCollectionViewCell {
+  
+  private func setUpUI() {
+    
+  }
+  
+  private func setUpButton() {
+    self.addSubview(dateButton)
+    
+    dateButton.snp.makeConstraints { button in
+      button.centerX.centerY.equalToSuperview()
+      
+    }
+  }
+  
+  private func buttonCornerRound() {
+    let width = dateButton.frame.size.width
+    
+    dateButton.clipsToBounds = true
+    dateButton.layer.cornerRadius = width / 2
+  }
+}
 //
 //struct SuggesionData {
 //  var sectionTitle: String
