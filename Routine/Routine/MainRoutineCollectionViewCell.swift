@@ -87,34 +87,42 @@ extension RoutineBoardCollectionViewCell {
     self.layer.borderColor = CGColor.init(red: 0, green: 0, blue: 0, alpha: 1)
   }
   
+  //TODO: FlowLayOut 구현 이후 리팩토링 필수 (FlowLayOut 미구현시 사용) (+마지막 셀 라운드 케이스 미구현)
+  //    func maskedCorner(indexPath: IndexPath, dataCount: Int) {
+  //
+  //        if dataCount == 1 {
+  //            return
+  //        }
+  //
+  //        if indexPath.item == 0 {
+  //            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+  //            return
+  //        }
+  //
+  //        let row = indexPath.item / 3 % 2
+  //        let position = indexPath.item % 3
+  //
+  //        switch (row, position) {
+  //        case (0,0):
+  //            self.layer.maskedCorners = [.layerMinXMaxYCorner]
+  //        case (0,1), (1,1):
+  //            self.layer.maskedCorners = []
+  //        case (0,2):
+  //            self.layer.maskedCorners = [.layerMaxXMinYCorner]
+  //        case (1,0):
+  //            self.layer.maskedCorners = [.layerMinXMinYCorner]
+  //        case (1,2):
+  //            self.layer.maskedCorners = [.layerMaxXMaxYCorner]
+  //        default:
+  //            return
+  //        }
+  //    }
+  
+  //TODO: FlowLayOut 구현 이후 리팩토링 필수(FlowLayOut 구현 이후 사용) (+마지막 셀 라운드 케이스 미구현)
   func maskedCorner(indexPath: IndexPath, dataCount: Int) {
-    
-    if dataCount == 1 {
-      return
-    }
-    
-    if indexPath.item == 0 {
-      self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-      return
-    }
-    
-    let row = indexPath.item / 3 % 2
-    let position = indexPath.item % 3
-    
-    switch (row, position) {
-    case (0,0):
-      self.layer.maskedCorners = [.layerMinXMaxYCorner]
-    case (0,1), (1,1):
-      self.layer.maskedCorners = []
-    case (0,2):
-      self.layer.maskedCorners = [.layerMaxXMinYCorner]
-    case (1,0):
-      self.layer.maskedCorners = [.layerMaxXMaxYCorner]
-    case (1,2):
-      self.layer.maskedCorners = [.layerMinXMinYCorner]
-    default:
-      return
-    }
+    let position = Position(dataCount: dataCount, index: indexPath.item)
+    self.layer.maskedCorners = position.maskedCorner()
+    return
     
   }
 }
