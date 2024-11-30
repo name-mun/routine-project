@@ -8,15 +8,16 @@
 import Foundation
 
 //MARK: - 루틴 보드 색
-enum RoutineBoardColor {
-    case red
-    case orange
-    case yellow
-    case green
-    case blue
-    case purple
-    case white
-    case black
+
+enum RoutineBoardColor: Codable {
+  case red
+  case orange
+  case yellow
+  case green
+  case blue
+  case purple
+  case white
+  case black
 }
 
 
