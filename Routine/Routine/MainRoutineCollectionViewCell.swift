@@ -18,7 +18,7 @@ class RoutineBoardCollectionViewCell: UICollectionViewCell {
   static let borderWidth: CGFloat = 1
   static let cornerRadius: CGFloat = 20
   
-  private var data: RoutineData?
+//  private var data: RoutineData?
   
   private var stackView = UIStackView().then { stackView in
     stackView.backgroundColor = .clear
@@ -48,18 +48,18 @@ class RoutineBoardCollectionViewCell: UICollectionViewCell {
   }
   
   private var isViewSetUp: Bool = false
-  
-  
-  func setData(_ data: RoutineData) {
-    self.data = data
-    
-    if !isViewSetUp {
-      setUpUI()
-    }
-    
-    updateData()
-  }
-  
+//  
+//  
+//  func setData(_ data: RoutineData) {
+//    self.data = data
+//    
+//    if !isViewSetUp {
+//      setUpUI()
+//    }
+//    
+//    updateData()
+//  }
+//  
   func setIndex(dataCount: Int, index: Int) {
     let position = Position(dataCount: dataCount, index: index)
     self.layer.maskedCorners = position.maskedCorner()
@@ -205,9 +205,9 @@ extension RoutineBoardCollectionViewCell {
   //뷰에 루틴 데이터 적용
   private func updateData() {
     updateBackgroundColor()
-    updateTitleLabel()
-    updateStickerImageView()
-    updateStopMarkView()
+//    updateTitleLabel()
+//    updateStickerImageView()
+//    updateStopMarkView()
   }
   
   private func updateBackgroundColor() {
@@ -215,48 +215,48 @@ extension RoutineBoardCollectionViewCell {
   }
   
   //타이틀 적용
-  private func updateTitleLabel() {
-    
-    guard let title = self.data?.title else {
-      print("[타이틀] 루틴 데이터가 저장되지 않았습니다.")
-      return
-    }
-    
-    guard let titleView = self.stackView.arrangedSubviews[0] as? UILabel else {
-      print("[타이틀] 스택 뷰에 라벨 뷰가 존재하지 않습니다.")
-      return
-    }
-    
-    titleView.text = title
-  }
-  
-  //스티커 이미지 적용
-  private func updateStickerImageView() {
-    
-    guard let _ = self.data?.sticker else {
-      print("[스티커] 루틴 데이터가 세팅되지 않았습니다.")
-      return
-    }
-    
-    guard let stickerImageView = self.stackView.arrangedSubviews[1] as? UIImageView else {
-      print("[스티커] 스택 뷰에 이미지 뷰가 존재하지 않습니다.")
-      return
-    }
-    
-    //임의의 에셋으로 대체
-    stickerImageView.image = UIImage(named: "Peatlee_ZEP")
-  }
-  
-  //중단여부에 따라 stopMark 반영
-  private func updateStopMarkView() {
-    guard let data = data, data.willStop else {
-      self.stopMarkView.image = nil
-      return }
-    
-    let stopMarkImage = UIImage(systemName: "minus.circle")
-    self.stopMarkView.image = stopMarkImage
-    self.stopMarkView.tintColor = .black
-  }
+//  private func updateTitleLabel() {
+//    
+//    guard let title = self.data?.title else {
+//      print("[타이틀] 루틴 데이터가 저장되지 않았습니다.")
+//      return
+//    }
+//    
+//    guard let titleView = self.stackView.arrangedSubviews[0] as? UILabel else {
+//      print("[타이틀] 스택 뷰에 라벨 뷰가 존재하지 않습니다.")
+//      return
+//    }
+//    
+//    titleView.text = title
+//  }
+//  
+//  //스티커 이미지 적용
+//  private func updateStickerImageView() {
+//    
+//    guard let _ = self.data?.sticker else {
+//      print("[스티커] 루틴 데이터가 세팅되지 않았습니다.")
+//      return
+//    }
+//    
+//    guard let stickerImageView = self.stackView.arrangedSubviews[1] as? UIImageView else {
+//      print("[스티커] 스택 뷰에 이미지 뷰가 존재하지 않습니다.")
+//      return
+//    }
+//    
+//    //임의의 에셋으로 대체
+//    stickerImageView.image = UIImage(named: "Peatlee_ZEP")
+//  }
+//  
+//  //중단여부에 따라 stopMark 반영
+//  private func updateStopMarkView() {
+//    guard let data = data, data.willStop else {
+//      self.stopMarkView.image = nil
+//      return }
+//    
+//    let stopMarkImage = UIImage(systemName: "minus.circle")
+//    self.stopMarkView.image = stopMarkImage
+//    self.stopMarkView.tintColor = .black
+//  }
 }
 
 
