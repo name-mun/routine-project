@@ -51,10 +51,6 @@ struct RoutineData {
     //1번 - RoutineManager 객체에서 '선택 날짜에 대한 검증'을 통해 데이터를 반환 -> [RoutineData]
     var repeatation1: Repeatation
     var stop1: Date?
-    //
-    
-    //2번 - RoutineManager 객체에서 'today2 메서드'를 통해 데이터를 반환 -> [RoutineData]
-    private var today: TodayRoutine
 
     
     //2번 - RoutineManager 객체에서 'today2 메서드'를 통해 데이터를 반환 -> [RoutineData]
