@@ -11,10 +11,11 @@ import Then
 
 //MARK: - MainRoutineViewController
 
+// 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
   
-  private var routineData: [RoutineData] = MockData.routines
-  
+  //private var routineData: [RoutineData] = MockData.routines
+
   private let routineCollectionView = UICollectionView(frame: .zero,
                                                        collectionViewLayout: UICollectionViewFlowLayout())
     .then { collectionView in
@@ -41,8 +42,8 @@ extension MainRoutineViewController: UICollectionViewDataSource, UICollectionVie
     
     switch collectionView {
     case self.routineCollectionView:
-      return routineData.count
-      
+      return 0 //routineData.count
+
     default:
       return 0
     }
@@ -131,12 +132,12 @@ extension MainRoutineViewController {
     
     let index = indexPath.item
     
-    guard self.routineData.count-1 >= index else { return RoutineBoardCollectionViewCell() }
-    
-    let data = self.routineData[index]
-    
-    routineBoardCollectionViewCell.setData(data)
-    routineBoardCollectionViewCell.setIndex(dataCount: routineData.count, index: index)
+//    guard self.routineData.count-1 >= index else { return RoutineBoardCollectionViewCell() }
+//    
+//    let data = self.routineData[index]
+//    
+//    routineBoardCollectionViewCell.setData(data)
+//    routineBoardCollectionViewCell.setIndex(dataCount: routineData.count, index: index)
     
     return routineBoardCollectionViewCell
   }

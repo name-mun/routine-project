@@ -51,7 +51,7 @@
 		233B22582CCE345700B02C46 /* Exceptions for "Routine" folder in "Routine" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Application/Info.plist,
 			);
 			target = 233B222F2CCE345500B02C46 /* Routine */;
 		};

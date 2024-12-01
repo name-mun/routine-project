@@ -23,7 +23,7 @@ import Then
 
 //MARK: - MainDateCollectionViewCell
 
-class MainDateCollectionViewCell: UICollectionViewCell {
+class MainViewDateCollectionViewCell: UICollectionViewCell {
   
   //루틴 실행 결과 반영 필요.
   private var date: Date?
@@ -61,7 +61,7 @@ class MainDateCollectionViewCell: UICollectionViewCell {
 
 //MARK: - Set Up UI
 
-extension MainDateCollectionViewCell {
+extension MainViewDateCollectionViewCell {
   
   private func setUpUI() {
     
