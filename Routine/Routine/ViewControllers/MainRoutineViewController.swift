@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Then
 
 //MARK: - MainRoutineViewController
 
@@ -16,15 +15,35 @@ class MainRoutineViewController: UIViewController {
     
     private var routineData: [RoutineData] = []
     
-    private let routineCollectionView = UICollectionView(frame: .zero,
-                                                         collectionViewLayout: UICollectionViewFlowLayout())
-        .then { collectionView in
-            collectionView.backgroundColor = .clear
-            collectionView.isEditing = false
-            collectionView.showsVerticalScrollIndicator = false
-        }
+    private let routineCollectionView: UICollectionView = {
+        
+        let collectionView = UICollectionView(frame: .zero,
+                                              collectionViewLayout: .init())
+        
+        let width = ( UIScreen.main.bounds.width - 2 * collectionViewConstantAbs ) / 3
+        let height = width * 1.1
+        
+        let snakeLayout = SnakeFlowLayout()
+        snakeLayout.itemSize = CGSize(width: width, height: height)
+        snakeLayout.minimumInteritemSpacing = 0
+        snakeLayout.minimumLineSpacing = 20
+        collectionView.collectionViewLayout = snakeLayout
+        
+        collectionView.backgroundColor = .clear
+        collectionView.isEditing = false
+        collectionView.showsVerticalScrollIndicator = false
+        
+        return collectionView
+    }()
     
-    private let collectionViewConstantAbs: CGFloat = 25
+    private let dateCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+        
+        
+        return collectionView
+    }()
+    
+    static private let collectionViewConstantAbs: CGFloat = 25
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +63,9 @@ extension MainRoutineViewController: UICollectionViewDataSource, UICollectionVie
         case self.routineCollectionView:
             return routineData.count
             
+        case self.dateCollectionView:
+            return 7
+            
         default:
             return 0
         }
@@ -56,10 +78,11 @@ extension MainRoutineViewController: UICollectionViewDataSource, UICollectionVie
         case self.routineCollectionView:
             return self.routineBoardCollectionViewCell(indexPath)
             
+        case self.dateCollectionView:
+            return self.dateCollectionViewCell(indexPath)
+            
         default:
-            let cell = UICollectionViewCell()
-            cell.backgroundColor = .red
-            return cell
+            return UICollectionViewCell()
         }
     }
 }
@@ -73,7 +96,6 @@ extension MainRoutineViewController {
     private func setRoutineBoardCollectionView() {
         setUpRoutineBoardCollectionView()
         setRoutineBoardCollectionViewController()
-        setRoutineBoardFlowLayout()
         registerRoutineBoardCell()
     }
     
@@ -85,7 +107,7 @@ extension MainRoutineViewController {
         routineCollectionView.snp.makeConstraints { collectionView in
             collectionView.top.equalTo(300)
             collectionView.bottom.equalTo(-30)
-            collectionView.leading.trailing.equalToSuperview().inset(collectionViewConstantAbs)
+            collectionView.leading.trailing.equalToSuperview().inset(Self.collectionViewConstantAbs)
         }
     }
     
@@ -97,25 +119,11 @@ extension MainRoutineViewController {
     
     //루틴보드 컬렉션 뷰 셀 등록
     private func registerRoutineBoardCell() {
-        self.routineCollectionView.register(RoutineBoardCollectionViewCell.self,
-                                            forCellWithReuseIdentifier: "RoutineBoardCollectionViewCell")
+        self.routineCollectionView
+            .register(RoutineBoardCollectionViewCell.self,
+                      forCellWithReuseIdentifier: "RoutineBoardCollectionViewCell")
     }
     
-    
-    //루틴보드 컬렉션 뷰 플로우 레이아웃 -> AI 작성 코드 사용 금지 절대 직접 재구현
-    private func setRoutineBoardFlowLayout() {
-        
-        let width = (UIScreen.main.bounds.width - 2 * collectionViewConstantAbs)/3
-        let height = width * 1.1
-        
-        let snakeLayout = SnakeFlowLayout()
-        snakeLayout.itemSize = CGSize(width: width, height: height)
-        snakeLayout.minimumInteritemSpacing = 0
-        snakeLayout.minimumLineSpacing = 20
-        snakeLayout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        
-        self.routineCollectionView.collectionViewLayout = snakeLayout
-    }
 }
 
 
@@ -136,6 +144,17 @@ extension MainRoutineViewController {
         routineBoardCollectionViewCell.setIndex(dataCount: routineData.count, index: index)
         
         return routineBoardCollectionViewCell
+    }
+}
+
+//MARK: -
+extension MainRoutineViewController {
+
+    private func dateCollectionViewCell(_ indexPath: IndexPath) -> MainViewDateCollectionViewCell {
+        guard let mainViewDateCollectionViewCell = self.dateCollectionView.dequeueReusableCell(withReuseIdentifier: "MainViewDateCollectionViewCell", for: indexPath) as? MainViewDateCollectionViewCell else { return MainViewDateCollectionViewCell() }
+        
+        
+        return mainViewDateCollectionViewCell
     }
 }
 

@@ -37,7 +37,7 @@ struct RoutineData {
     
     //루틴보드 뷰 용 데이터
     var title: String = ""
-    var color: Color = .white
+    var color: BoardColor = .white
     var sticker: String = "heart"
     
     
@@ -78,12 +78,24 @@ struct TodayRoutine {
 }
 
 
-enum Color {
+enum BoardColor {
     case white
     case yello
     case blue
     case green
     case red
+    
+    var red: Double {
+        return 1
+    }
+    
+    var green: Double {
+        return 1
+    }
+    
+    var blue: Double {
+        return 1
+    }
 }
 
 enum Repeatation{
