@@ -23,7 +23,7 @@ import Foundation
  날짜 선택시 해당날짜 요일을 변환 -> 요일 기준
  Date.
  
-*/
+ */
 
 //데이터에 접근
 //루틴ID -> [루틴ID]
@@ -31,35 +31,37 @@ import Foundation
 //루틴 아이디 전체불러와서 -> 각각 ID를 통해 전체 루틴 데이터를 불러오고
 typealias RoutineID = Int
 
-struct RoutineData {
+typealias AssetName = String
 
+let id = UUID()
+
+struct RoutineData {
+    
     let id: RoutineID = 0
     
     //루틴보드 뷰 용 데이터
     var title: String = ""
-    var color: Color = .white
-    var sticker: String = "heart"
-    
+    var color: BoardColor = .white
+    var sticker: AssetName = "heart"
     
     
     var alarm: String?
     
     //반복주기 및 중단 데이터
-    //1번 - 캘린더 객체에서 '선택 날짜에 대한 검증'을 통해 데이터를 반환 -> [RoutineData]
+    //1번 - RoutineManager 객체에서 '선택 날짜에 대한 검증'을 통해 데이터를 반환 -> [RoutineData]
     var repeatation1: Repeatation
     var stop1: Date?
-    //
-    
-    //2번 - 캘린더 객체에서 'today2 메서드'를 통해 데이터를 반환 -> [RoutineData]
-    private var today: TodayRoutine
 
+    
+    //2번 - RoutineManager 객체에서 'today2 메서드'를 통해 데이터를 반환 -> [RoutineData]
+    private var today: TodayRoutine
+    
     var repeatation2: Repeatation { today.repeatation }
     var stop2: Date? { today.stop }
     
     func today2(date: Date) -> Bool {
         today.isCorrect(date)
     }
-    
 }
 
 struct TodayRoutine {
@@ -78,7 +80,7 @@ struct TodayRoutine {
 }
 
 
-enum Color {
+enum BoardColor {
     case white
     case yello
     case blue
@@ -86,12 +88,13 @@ enum Color {
     case red
 }
 
-enum Repeatation{
+
+enum Repeatation: Codable {
     
     case weeklyDay(Set<WeeklyDay>)
     case monthlyDay(Set<Int>)
     
-    enum WeeklyDay: Int {
+    enum WeeklyDay: Int, Codable {
         case monday = 0
         case tuesday
         case wednesday
@@ -102,7 +105,7 @@ enum Repeatation{
         
         init(date: Date) {
             let dayOfWeekIndex = (Calendar.current.component(.weekday, from: date) + 5) % 7
-                        
+            
             guard let dayOfWeek = WeeklyDay.init(rawValue: dayOfWeekIndex) else {
                 self = .sunday
                 return

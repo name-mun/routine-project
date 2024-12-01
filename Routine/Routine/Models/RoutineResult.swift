@@ -19,22 +19,28 @@ import Foundation
 
  */
 
+
+///RoutineResult를 관리하는 싱글톤 객체
+///
+///CRUD 메서드 지원
+///
 class RoutineResultManager {
-//    
-//    var routineResults: [RoutineResult] = []
-//
+    
+    static let shared = RoutineResultManager()
+    
+    private init() {}
+
     //
-    func createRoutineResults(_ dateID: Date, _ routineID: RoutineID) {}
+    func create(_ dateID: Date, _ routineID: RoutineID) {}
     
     //
-    func readRountineResults(_ dateID: Date, _ routineID: RoutineID) {}
+    func read(_ dateID: Date, _ routineID: RoutineID) {}
     
     //
-    func updateRountineResults(_ dateID: Date, _ routineID: RoutineID) {}
+    func update(_ dateID: Date, _ routineID: RoutineID) {}
     
     //
-    func deleteRountineResults(_ dateID: Date, _ routineID: RoutineID) {}
-    
+    func delete(_ dateID: Date, _ routineID: RoutineID) {}
     
 }
 

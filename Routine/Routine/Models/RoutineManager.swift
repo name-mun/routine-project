@@ -28,22 +28,32 @@ import Foundation
  [RoutineID] 수정 -> 그 이후 날짜들이 이어받음
 */
 
+///RoutineData를 관리하는 싱글톤 객체
+///
+///CRUD 메서드 지원
+///
 class RoutineManager {
     
-    //
-    func createRoutine(_ rountine: RoutineData) {}
+    static let shared = RoutineManager()
     
-    //
-    func readRoutine(_ routineID: RoutineID) -> RoutineData? {
+    private init() {}
+    
+    ///CoreData에 루틴 데이터를 저장한다.
+    ///RoutineData를 생성해서 입력하면,
+    ///
+    func create(_ rountine: RoutineData) {}
+    
+    ///
+    func read(_ routineID: RoutineID) -> RoutineData? {
         
         return nil
     }
     
     //
-    func updateRoutine(_ routine: RoutineData) {}
+    func update(_ routine: RoutineData) {}
     
     //
-    func deleteRountine(_ routineID: RoutineID) {}
+    func delete(_ routineID: RoutineID) {}
     
 }
 
