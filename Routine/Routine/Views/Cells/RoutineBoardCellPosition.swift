@@ -26,109 +26,110 @@ import UIKit
 //MARK: - RoutineBoardCollectionViewCell.Position
 
 extension RoutineBoardCollectionViewCell {
-  
-  //셀 보드의 위치
-  struct Position {
     
-    let role: Role
-    let line: Line
-//    let row: Row
-    
-    init(dataCount: Int, index: Int) {
-      self.role = Role(dataCount: dataCount, index: index)
-      self.line = Line(index)
-    }
-    
-    //마스크 코너 반환
-    func maskedCorner() -> CACornerMask {
-      switch role {
-      case .first:
-        return [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+    ///루틴 보드의 위치를 저장하는 데이터
+    ///maskedCorner(): 코너 마스크 배열
+    ///푸터의 형태를 반환
+    ///
+    struct Position {
         
-      case .normal:
-        switch line {
-        case .even(.first):
-          return [.layerMaxXMaxYCorner]
-          
-        case .even(.third):
-          return [.layerMinXMinYCorner]
-          
-        case .odd(.first):
-          return [.layerMinXMaxYCorner]
-          
-        case .odd(.third):
-          return [.layerMaxXMinYCorner]
-          
-        default:
-          return []
+        let role: Role
+        let line: Line
+        
+        init(dataCount: Int, index: Int) {
+            self.role = Role(dataCount: dataCount, index: index)
+            self.line = Line(index)
         }
         
+        //마스크 코너 반환
+        func maskedCorner() -> CACornerMask {
+            
+            switch role {
+            case .first:
+                return [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+                
+            case .normal:
+                switch line {
+                case .even(.first):
+                    return [.layerMaxXMaxYCorner]
+                    
+                case .even(.third):
+                    return [.layerMinXMinYCorner]
+                    
+                case .odd(.first):
+                    return [.layerMinXMaxYCorner]
+                    
+                case .odd(.third):
+                    return [.layerMaxXMinYCorner]
+                    
+                default:
+                    return []
+                }
+                
+            case .last:
+                switch line {
+                case .even(.first), .odd(.first):
+                    return []
+                    
+                case .odd(.second), .odd(.third):
+                    return [.layerMaxXMinYCorner]
+                    
+                default:
+                    return [.layerMinXMinYCorner]
+                }
+            }
+        }
         
-      case .last:
-        switch line {
-        case .even(.first), .odd(.first):
-          return []
-          
-        case .odd(.second), .odd(.third):
-          return [.layerMaxXMinYCorner]
-          
-        default:
-          return [.layerMinXMinYCorner]
+        
+        //첫번째, 마지막, 그외
+        enum Role {
+            case first
+            case normal
+            case last
+            
+            init(dataCount: Int, index: Int) {
+                if index == 0 && dataCount > 1 {
+                    self = .first
+                } else if index == dataCount-1 {
+                    self = .last
+                } else {
+                    self = .normal
+                }
+            }
         }
-      }
-    }
-    
-    
-    //첫번째, 마지막, 그외
-    enum Role {
-      case first
-      case normal
-      case last
-      
-      init(dataCount: Int, index: Int) {
-        if index == 0 && dataCount > 1 {
-          self = .first
-        } else if index == dataCount-1 {
-          self = .last
-        } else {
-          self = .normal
+        
+        //홀수 짝수 줄
+        enum Line {
+            case odd(Row)
+            case even(Row)
+            
+            init(_ index: Int) {
+                let row = Row(index)
+                let line = index / 3 % 2
+                self = (line == 0) ? .odd(row) : .even(row)
+            }
         }
-      }
-    }
-    
-    //홀수 짝수 줄
-    enum Line {
-      case odd(Row)
-      case even(Row)
-      
-      init(_ index: Int) {
-        let row = Row(index)
-        let line = index / 3 % 2
-        self = (line == 0) ? .odd(row) : .even(row)
-      }
-    }
-    
-    //라인의 첫번째, 두번째, 세번째
-    enum Row {
-      case first
-      case second
-      case third
-      
-      init(_ index: Int) {
-        let index = index % 3
-        switch index {
-        case 0: self = .first
-        case 1: self = .second
-        default: self = .third
+        
+        //라인의 첫번째, 두번째, 세번째
+        enum Row {
+            case first
+            case second
+            case third
+            
+            init(_ index: Int) {
+                let index = index % 3
+                switch index {
+                case 0: self = .first
+                case 1: self = .second
+                default: self = .third
+                }
+            }
         }
-      }
     }
-  }
-  
+    
 }
 
 
 #Preview("MainRoutineViewController") {
-  let viewController = MainRoutineViewController()
-  return viewController
+    return MainRoutineViewController()
 }

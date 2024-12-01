@@ -53,7 +53,7 @@ class MainViewDateCollectionViewCell: UICollectionViewCell {
     setUpUI()
   }
   
-  func setDate(_ date: Date) {
+  func setData(_ date: Date) {
     self.date = date
   }
   
