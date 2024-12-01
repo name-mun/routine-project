@@ -21,12 +21,12 @@ class RoutineSuggestionCollectionViewCell: UICollectionViewCell {
   }
 
   func configure(indexA: Int, indexB: Int) {
-    let thisCategory = RoutineSuggestionData.routineSuggestionData[indexA][indexB]
+    //let thisCategory = RoutineSuggestionData.routineSuggestionData[indexA][indexB]
 
     view.layer.borderWidth = 1.0
     view.layer.borderColor = UIColor.black.cgColor
 
-    itemLabel.text = thisCategory.title
+    //itemLabel.text = thisCategory.title
     itemLabel.font = .systemFont(ofSize: 15)
     itemLabel.textColor = .black
 

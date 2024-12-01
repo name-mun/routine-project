@@ -130,7 +130,7 @@ extension MainRoutineViewController {
       return RoutineBoardCollectionViewCell()
     }
     
-    let index = indexPath.item
+    // let index = indexPath.item
     
 //    guard self.routineData.count-1 >= index else { return RoutineBoardCollectionViewCell() }
 //    

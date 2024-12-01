@@ -20,12 +20,12 @@ class RoutineSuggestionTableHeader: UITableViewHeaderFooterView {
     func configure(_ section: Int) {
         titleLabel.textColor = .black
         titleLabel.font = .boldSystemFont(ofSize: 20)
-        titleLabel.text = RoutineSuggestionData.title[section]
-        
+        //titleLabel.text = RoutineSuggestionData.title[section]
+
         subtitleLabel.textColor = .darkGray
         subtitleLabel.font = .systemFont(ofSize: 15)
-        subtitleLabel.text = RoutineSuggestionData.subtitle[section]
-        
+        //subtitleLabel.text = RoutineSuggestionData.subtitle[section]
+
         contentView.addSubview(titleLabel)
         contentView.addSubview(subtitleLabel)
         

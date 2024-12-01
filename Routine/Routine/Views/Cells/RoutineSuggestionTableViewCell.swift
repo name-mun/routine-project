@@ -56,7 +56,7 @@ class RoutineSuggestionTableViewCell: UITableViewCell {
 extension RoutineSuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return RoutineSuggestionData.itemCount
+        return 0 //RoutineSuggestionData.itemCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

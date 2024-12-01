@@ -116,7 +116,7 @@ class RoutineSuggestionViewController: UIViewController {
 extension RoutineSuggestionViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-      return RoutineSuggestionData.categoryCount
+        return 0 // RoutineSuggestionData.categoryCount
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
