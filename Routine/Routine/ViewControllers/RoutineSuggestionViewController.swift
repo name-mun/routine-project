@@ -97,7 +97,7 @@ class RoutineSuggestionViewController: UIViewController {
     
     @objc
     func clickButton() {
-        let newViewController = RoutineAddViewController()
+        let newViewController = CreateRoutineViewController()
         
         let nav = self.presentingViewController as? UINavigationController
         
