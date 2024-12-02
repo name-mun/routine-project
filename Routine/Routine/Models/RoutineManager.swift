@@ -34,26 +34,20 @@ import Foundation
 ///
 class RoutineManager {
     
-    static let shared = RoutineManager()
+    //
+    func create(id: RoutineData) {}
     
-    private init() {}
-    
-    ///CoreData에 루틴 데이터를 저장한다.
-    ///RoutineData를 생성해서 입력하면,
-    ///
-    func create(_ rountine: RoutineData) {}
-    
-    ///
-    func read(_ routineID: RoutineID) -> RoutineData? {
+    //
+    func read(id: RoutineID, date: Date) -> RoutineData? {
         
         return nil
     }
     
     //
-    func update(_ routine: RoutineData) {}
+    func update(id: RoutineData) {}
     
     //
-    func delete(_ routineID: RoutineID) {}
+    func delete(id: RoutineID) {}
     
 }
 

@@ -13,15 +13,43 @@ import Then
 
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
-  
-  //private var routineData: [RoutineData] = MockData.routines
-
-  private let routineCollectionView = UICollectionView(frame: .zero,
-                                                       collectionViewLayout: UICollectionViewFlowLayout())
-    .then { collectionView in
-      collectionView.backgroundColor = .clear
-      collectionView.isEditing = false
-      collectionView.showsVerticalScrollIndicator = false
+    
+    private var routineData: [RoutineData] = []
+    
+    private let routineCollectionView: UICollectionView = {
+        
+        let collectionView = UICollectionView(frame: .zero,
+                                              collectionViewLayout: .init())
+        
+        let width = ( UIScreen.main.bounds.width - 2 * collectionViewConstantAbs ) / 3
+        let height = width * 1.1
+        
+        let snakeLayout = SnakeFlowLayout()
+        snakeLayout.itemSize = CGSize(width: width, height: height)
+        snakeLayout.minimumInteritemSpacing = 0
+        snakeLayout.minimumLineSpacing = 20
+        collectionView.collectionViewLayout = snakeLayout
+        
+        collectionView.backgroundColor = .clear
+        collectionView.isEditing = false
+        collectionView.showsVerticalScrollIndicator = false
+        
+        return collectionView
+    }()
+    
+    private let dateCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+        
+        return collectionView
+    }()
+    
+    static private let collectionViewConstantAbs: CGFloat = 25
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.backgroundColor = .gray
+        setRoutineBoardCollectionView()
     }
   
   private let collectionViewConstantAbs: CGFloat = 25
@@ -107,17 +135,31 @@ extension MainRoutineViewController {
   //루틴보드 컬렉션 뷰 플로우 레이아웃 -> AI 작성 코드 사용 금지 절대 직접 재구현
   private func setRoutineBoardFlowLayout() {
     
-    let width = (UIScreen.main.bounds.width - 2 * collectionViewConstantAbs)/3
-    let height = (UIScreen.main.bounds.width - 2 * collectionViewConstantAbs)/3 * 1.1
     
-    let snakeLayout = SnakeFlowLayout()
-    snakeLayout.itemSize = CGSize(width: width, height: height)
-    snakeLayout.minimumInteritemSpacing = 0
-    snakeLayout.minimumLineSpacing = 20
-    snakeLayout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+    //루틴보드 컬렉션 뷰 UI 설정
+    private func setUpRoutineBoardCollectionView() {
+        
+        self.view.addSubview(routineCollectionView)
+        
+        routineCollectionView.snp.makeConstraints { collectionView in
+            collectionView.top.equalTo(300)
+            collectionView.bottom.equalTo(-30)
+            collectionView.leading.trailing.equalToSuperview().inset(Self.collectionViewConstantAbs)
+        }
+    }
     
-    self.routineCollectionView.collectionViewLayout = snakeLayout
-  }
+    //루틴보드 컬렉션 뷰 데이터 소스 & 델리게이트 설정
+    private func setRoutineBoardCollectionViewController() {
+        routineCollectionView.delegate = self
+        routineCollectionView.dataSource = self
+    }
+    
+    //루틴보드 컬렉션 뷰 셀 등록
+    private func registerRoutineBoardCell() {
+        self.routineCollectionView
+            .register(RoutineBoardCollectionViewCell.self,
+                      forCellWithReuseIdentifier: "RoutineBoardCollectionViewCell")
+    }
 }
 
 
