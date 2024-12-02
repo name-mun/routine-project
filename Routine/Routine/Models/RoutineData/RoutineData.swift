@@ -30,6 +30,24 @@ typealias RoutineID = UUID
 
 struct RoutineData: Codable {
     
+    let id: RoutineID
+    
+    //루틴보드 뷰 용 데이터
+    var title: String
+    var color: BoardColor
+    var sticker: String
+
+    let startDate: Date
+    var stopDate: Date?
+    var repeatation: Repeatation
+    
+    var alarm: String?
+    
+    func isScheduled(date: Date) -> Bool {
+        //자체로직 구현
+        return false
+    }
+        
 
     init(id: RoutineID = UUID(),
          title: String,
@@ -70,24 +88,6 @@ struct RoutineData: Codable {
         case stopDate = "stop_date"
         case repeatation
         case alarm
-    }
-    
-    let id: RoutineID
-    
-    //루틴보드 뷰 용 데이터
-    var title: String
-    var color: BoardColor
-    var sticker: String
-
-    let startDate: Date
-    var stopDate: Date?
-    var repeatation: Repeatation
-    
-    var alarm: String?
-    
-    func isScheduled(date: Date) -> Bool {
-        //자체로직 구현
-        return false
     }
 }
 

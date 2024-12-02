@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		231665552CE449320009B2C4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 231665542CE449320009B2C4 /* SnapKit */; };
-		2316655A2CE4493B0009B2C4 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231665592CE4493B0009B2C4 /* Then */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,7 +83,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				231665552CE449320009B2C4 /* SnapKit in Frameworks */,
-				2316655A2CE4493B0009B2C4 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +153,6 @@
 			name = Routine;
 			packageProductDependencies = (
 				231665542CE449320009B2C4 /* SnapKit */,
-				231665592CE4493B0009B2C4 /* Then */,
 			);
 			productName = Routine;
 			productReference = 233B22302CCE345500B02C46 /* Routine.app */;
@@ -241,7 +238,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				231665532CE449320009B2C4 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				231665582CE4493B0009B2C4 /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 233B22312CCE345500B02C46 /* Products */;
@@ -614,14 +610,6 @@
 				minimumVersion = 5.6.0;
 			};
 		};
-		231665582CE4493B0009B2C4 /* XCRemoteSwiftPackageReference "Then" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/devxoul/Then.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -629,11 +617,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 231665532CE449320009B2C4 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		231665592CE4493B0009B2C4 /* Then */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 231665582CE4493B0009B2C4 /* XCRemoteSwiftPackageReference "Then" */;
-			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
