@@ -28,7 +28,11 @@ import Foundation
 
 typealias RoutineID = UUID
 
-struct RoutineData: Codable, CustomStringConvertible {
+struct RoutineData: Codable, CustomStringConvertible, Equatable {
+//    
+    static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
+        return lhs.checkID(routineID: rhs.id, dateID: rhs.startDate)
+    }
     
     var description: String {
         let stopDate = "\(stopDate ?? "미설정")"
@@ -63,6 +67,8 @@ struct RoutineData: Codable, CustomStringConvertible {
     //알림 값
     var alarm: String?
     
+    ///JSONData로 인코딩 후 반환
+    ///
     func jsonData() -> Data? {
         let jsonEncoder = JSONEncoder()
         
@@ -70,6 +76,7 @@ struct RoutineData: Codable, CustomStringConvertible {
         
         return jsonData
     }
+    
     
     init(id: RoutineID = UUID(),
          title: String,
@@ -116,7 +123,11 @@ struct RoutineData: Codable, CustomStringConvertible {
 //MARK: - RoutineData 검증 메서드
 extension RoutineData {
     
+
+    
     ///루틴ID와 날짜ID를 통한 검증
+    ///
+    ///
     ///
     func checkID(routineID: UUID, dateID: Date) -> Bool {
         self.id == routineID && self.startDate == dateID

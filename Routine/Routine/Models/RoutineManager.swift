@@ -81,10 +81,59 @@ class RoutineManager {
     }
     
     //
-    func update(id: RoutineData) {}
+    func update(routine: RoutineData) {
+        
+        do {
+            let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
+            for routineDataModel in routineDataModels as [NSManagedObject] {
+                
+                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Decoder {
+                    if let routineData = try? RoutineData(from: routineJSONData) {
+                        if routineData == routine {
+                            routineDataModel.setValue(routine, forKey: RoutineDataModel.Key.routineJSONData)
+                        }
+                    }
+                }
+            }
+            
+            try container.viewContext.save()
+        } catch let error {
+            print("error - \(error.localizedDescription)")
+        }
+    }
     
     //
-    func delete(id: RoutineID) {}
+    func delete(id: RoutineID) {
+        do {
+            let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
+            for routineDataModel in routineDataModels as [NSManagedObject] {
+                
+                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Decoder {
+                    if let routineData = try? RoutineData(from: routineJSONData) {
+                        if routineData.id == id {
+                            self.container.viewContext.delete(routineDataModel)
+                        }
+                    }
+                }
+            }
+            
+            try container.viewContext.save()
+        } catch let error {
+            print("error - \(error.localizedDescription)")
+        }
+    }
+    
+    func clearData() {
+        do {
+            let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
+            for routineDataModel in routineDataModels as [NSManagedObject] {
+                self.container.viewContext.delete(routineDataModel)
+            }
+            try container.viewContext.save()
+        } catch let error {
+            print("error - \(error.localizedDescription)")
+        }
+    }
     
 }
 

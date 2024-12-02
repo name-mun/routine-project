@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import Then
+
 
 //MARK: - MainRoutineViewController
 
@@ -133,7 +133,7 @@ extension MainRoutineViewController {
   
   
   //루틴보드 컬렉션 뷰 플로우 레이아웃 -> AI 작성 코드 사용 금지 절대 직접 재구현
-  private func setRoutineBoardFlowLayout() {
+    private func setRoutineBoardFlowLayout() {}
     
     
     //루틴보드 컬렉션 뷰 UI 설정

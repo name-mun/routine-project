@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Then
 
 //Data 저장형식 선정
 /*

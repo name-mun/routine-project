@@ -13,27 +13,29 @@ import Foundation
 ///
 ///monthlyDay(Set_Int) - 월간 반복
 ///
-enum Repeatation: Codable {
+enum Repeatation: Codable, CustomStringConvertible {
+    
+    var description: String {
+        switch self {
+        case .monthlyDay(let monthlyDay):
+            return "월간 \(monthlyDay.sorted(by: <))"
+        case .weeklyDay(let weeklyDay):
+            return "주간 \(weeklyDay.sorted(by: <))"
+        }
+    }
     
     //순서 보장 x
     case weeklyDay(Set<WeeklyDay>)
     case monthlyDay(Set<Int>)
     
-    func contains(_ date: Date) -> Bool {
-        switch self {
-        case .monthlyDay(let monthlyDays):
-            let monthlyDay = Calendar.current.component(.day, from: date)
-            return monthlyDays.contains(monthlyDay)
-        case .weeklyDay(let weeklyDays):
-            let weeklyDay = WeeklyDay(date: date)
-            return weeklyDays.contains(weeklyDay)
-        }
-    }
-    
     ///요일 데이터 형식
     ///
     ///monday = 0, sunday = 6
-    enum WeeklyDay: Int, Codable, CaseIterable {
+    enum WeeklyDay: Int, Codable, CaseIterable, CustomStringConvertible, Comparable {
+        static func < (lhs: Repeatation.WeeklyDay, rhs: Repeatation.WeeklyDay) -> Bool {
+            lhs.rawValue < rhs.rawValue
+        }
+        
         case monday = 0
         case tuesday
         case wednesday
@@ -41,6 +43,18 @@ enum Repeatation: Codable {
         case friday
         case saturday
         case sunday = 6
+        
+        var description: String {
+            switch self {
+            case .monday: return "월"
+            case .tuesday: return "화"
+            case .wednesday: return "수"
+            case .thursday: return "목"
+            case .friday: return "금"
+            case .saturday: return "토"
+            case .sunday: return "일"
+            }
+        }
         
         init(date: Date) {
             let dayOfWeekIndex = (Calendar.current.component(.weekday, from: date) + 5) % 7
