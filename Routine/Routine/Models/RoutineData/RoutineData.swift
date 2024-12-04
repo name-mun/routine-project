@@ -43,11 +43,22 @@ struct RoutineData: Codable {
     
     var alarm: String?
     
+    func jsonData() -> Data? {
+        let jsonEncoder = JSONEncoder()
+        
+        let jsonData = try? jsonEncoder.encode(self)
+        
+        return jsonData
+    }
+    
     func isScheduled(date: Date) -> Bool {
         //자체로직 구현
         return false
     }
         
+    func checkID(routineID: UUID, dateID: Date) -> Bool {
+        self.id == routineID && self.startDate == dateID 
+    }
 
     init(id: RoutineID = UUID(),
          title: String,

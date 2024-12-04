@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 ///
 ///캘린더 날짜를 선택했을 때, 필요한 데이터를 저장하는 바로 저장
@@ -16,7 +17,7 @@ import Foundation
 
 
 /*
-루틴매니저
+ 루틴매니저
  
  새로운 루틴을 생성, 수정, 삭제
  CRUD
@@ -26,7 +27,7 @@ import Foundation
  + deleteRountine(루틴ID)
  
  [RoutineID] 수정 -> 그 이후 날짜들이 이어받음
-*/
+ */
 
 ///RoutineData를 관리하는 싱글톤 객체
 ///
@@ -34,11 +35,47 @@ import Foundation
 ///
 class RoutineManager {
     
+    let container = NSPersistentContainer()
+    
     //
-    func create(id: RoutineData) {}
+    func create(_ routineData: RoutineData) {
+        
+        guard let data = routineData.jsonData(),
+              let entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className,
+                                                      in: self.container.viewContext) else { return }
+        
+        let routineDataModel = NSManagedObject(entity: entity,
+                                               insertInto: self.container.viewContext)
+        
+        routineDataModel.setValue(data, forKey: RoutineDataModel.Key.routineDataJSON)
+        
+        do {
+            try self.container.viewContext.save()
+        } catch let error {
+            print("error - \(error.localizedDescription)")
+        }
+    }
     
     //
     func read(id: RoutineID, date: Date) -> RoutineData? {
+        
+        do {
+            let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
+            
+            for routineDataModel in routineDataModels as [NSManagedObject] {
+                
+                if let routineDataJSON = routineDataModel.value(forKey: RoutineDataModel.Key.routineDataJSON) as? Decoder {
+                    if let routineData = try? RoutineData(from: routineDataJSON) {
+                        if routineData.checkID(routineID: id, dateID: date) {
+                            return routineData
+                        }
+                    }
+                }
+                
+            }
+        } catch let error {
+            print("error - \(error.localizedDescription)")
+        }
         
         return nil
     }
@@ -56,26 +93,26 @@ struct TodayRoutines {
     
     let dateID: Date
     lazy var routines: [RoutineData] = {
-    // Calender에서 dateID 통해 루틴ID들을 불러온다
-    //
-    // 데이터에서 불러와서 검증 후 저장
-    // return coreDate.(dateID)
+        // Calender에서 dateID 통해 루틴ID들을 불러온다
+        //
+        // 데이터에서 불러와서 검증 후 저장
+        // return coreDate.(dateID)
         return []
     }()
     
-//    init(date: Date) {
-//        dateID = date
-//        
-//        //데이터에서 해당 날짜의 루틴을 검증 후 저장 생성
-//        routines = []
-//    }
+    //    init(date: Date) {
+    //        dateID = date
+    //
+    //        //데이터에서 해당 날짜의 루틴을 검증 후 저장 생성
+    //        routines = []
+    //    }
     
     //날짜에 대한 루틴 데이터 검증 메서드
     //날짜에 해당하는 루틴 데이터 배열 반환 메서드
-//    func data(of date: Date) -> [RoutineData] {
-//        
-//        return []
-//    }
+    //    func data(of date: Date) -> [RoutineData] {
+    //
+    //        return []
+    //    }
 }
 
 
