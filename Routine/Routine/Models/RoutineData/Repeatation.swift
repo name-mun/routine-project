@@ -15,12 +15,27 @@ import Foundation
 ///
 enum Repeatation: Codable, CustomStringConvertible {
     
+    ///
     var description: String {
         switch self {
         case .monthlyDay(let monthlyDay):
             return "월간 \(monthlyDay.sorted(by: <))"
         case .weeklyDay(let weeklyDay):
             return "주간 \(weeklyDay.sorted(by: <))"
+        }
+    }
+    
+    ///날짜 포함 여부 확인 메서드
+    ///
+    func contains(_ date: Date) -> Bool {
+        switch self {
+        case .monthlyDay(let monthlyDays):
+            let monthlyDay = Calendar.current.component(.day, from: date)
+            return monthlyDays.contains(monthlyDay)
+            
+        case .weeklyDay(let weeklyDays):
+            let weeklyDay = WeeklyDay(date: date)
+            return weeklyDays.contains(weeklyDay)
         }
     }
     
@@ -63,7 +78,6 @@ enum Repeatation: Codable, CustomStringConvertible {
                 self = .sunday
                 return
             }
-            
             self = dayOfWeek
         }
     }

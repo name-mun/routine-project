@@ -65,6 +65,7 @@ struct RoutineResultByDate {
 
 //루틴 결과
 struct RoutineResult {
-    let id: RoutineID = 0
+    let id: RoutineID
     var isCompleted: Bool = false
+    
 }

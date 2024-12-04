@@ -19,7 +19,7 @@ enum BoardColor: Codable {
     case green
     case red
 
-    func getColor() -> UIColor {
+    func get() -> UIColor {
         switch self {
         case .white: return UIColor.white
         case .yello: return UIColor.black

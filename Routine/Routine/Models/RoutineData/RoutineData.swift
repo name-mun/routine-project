@@ -25,17 +25,14 @@ import Foundation
  Date.
  
  */
-
+typealias AssetName = String
 typealias RoutineID = UUID
 
 struct RoutineData: Codable, CustomStringConvertible, Equatable {
 //    
-    static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
-        return lhs.checkID(routineID: rhs.id, dateID: rhs.startDate)
-    }
-    
+
     var description: String {
-        let stopDate = "\(stopDate ?? "미설정")"
+        let stopDate = "\(String(describing: stopDate))"
         let alarm = "\(alarm ?? "미설정")"
         
         return """
@@ -75,6 +72,11 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         let jsonData = try? jsonEncoder.encode(self)
         
         return jsonData
+    }
+    
+    static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
+        return lhs.id == rhs.id && lhs.startDate == rhs.startDate
+
     }
     
     
@@ -123,11 +125,7 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
 //MARK: - RoutineData 검증 메서드
 extension RoutineData {
     
-
-    
     ///루틴ID와 날짜ID를 통한 검증
-    ///
-    ///
     ///
     func checkID(routineID: UUID, dateID: Date) -> Bool {
         self.id == routineID && self.startDate == dateID
@@ -150,6 +148,7 @@ extension RoutineData {
     
     // 중단 날짜를 통한 검증
     private func isntStop(_ date: Date) -> Bool {
+        guard let stopDate = self.stopDate else { return true }
         return date < stopDate
     }
 }

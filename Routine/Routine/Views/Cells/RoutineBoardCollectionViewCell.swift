@@ -19,36 +19,45 @@ class RoutineBoardCollectionViewCell: UICollectionViewCell {
     
     private var routine: RoutineData?
     
-    private var stackView = UIStackView().then { stackView in
+    private var stackView: UIStackView = {
+        let stackView = UIStackView()
         stackView.backgroundColor = .clear
         stackView.alignment = .center
         stackView.axis = .vertical
-    }
+        
+        return stackView
+    }()
     
-    private let titleLabel = UILabel().then { titleLabel in
+    private let titleLabel: UILabel = {
+        let titleLabel = UILabel()
         titleLabel.backgroundColor = .clear
         titleLabel.textColor = .black
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 3
-    }
+        return titleLabel
+    }()
     
-    private let stopMarkView = UIImageView().then { imageView in
+    private let stopMarkView: UIImageView = {
+        let imageView = UIImageView()
         imageView.backgroundColor = .clear
         imageView.image = UIImage(systemName: "minus.circle")
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .red
         imageView.isHidden = true
-    }
+        return imageView
+    }()
     
-    private let imageView = UIImageView().then { imageView in
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
         imageView.contentMode = .bottom
         imageView.backgroundColor = .clear
         imageView.contentMode = .scaleAspectFit
-    }
+        return imageView
+    }()
     
     private var isViewSetUp: Bool = false
-    //
+    
     //
     func setData(_ routine: RoutineData) {
         self.routine = routine
@@ -59,6 +68,7 @@ class RoutineBoardCollectionViewCell: UICollectionViewCell {
         
         updateData()
     }
+    
     //
     func setIndex(dataCount: Int, index: Int) {
         let position = Position(dataCount: dataCount, index: index)
@@ -177,7 +187,7 @@ extension RoutineBoardCollectionViewCell {
         updateBackgroundColor(routine.color)
         updateTitleLabel(routine.title)
         updateStickerImageView(routine.sticker)
-        updateStopMarkView(routine.stop2 != nil)
+        updateStopMarkView(routine.stopDate != nil)
     }
     
     private func updateBackgroundColor(_ color: BoardColor) {
