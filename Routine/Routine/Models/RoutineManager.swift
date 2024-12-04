@@ -37,7 +37,7 @@ class RoutineManager {
     
     let container = NSPersistentContainer()
     
-    //
+    /// RoutineData를 입력받아 인코딩 후 CoreData에 저장
     func create(_ routineData: RoutineData) {
         
         guard let data = routineData.jsonData(),
@@ -47,7 +47,7 @@ class RoutineManager {
         let routineDataModel = NSManagedObject(entity: entity,
                                                insertInto: self.container.viewContext)
         
-        routineDataModel.setValue(data, forKey: RoutineDataModel.Key.routineDataJSON)
+        routineDataModel.setValue(data, forKey: RoutineDataModel.Key.routineJSONData)
         
         do {
             try self.container.viewContext.save()
@@ -56,17 +56,17 @@ class RoutineManager {
         }
     }
     
-    //
-    func read(id: RoutineID, date: Date) -> RoutineData? {
+    /// id:RoutineID(UUID) 와 startDate: Date 를 입력받아 RoutineData 를 반환
+    func read(routineID: RoutineID, dateID: Date) -> RoutineData? {
         
         do {
             let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
             
             for routineDataModel in routineDataModels as [NSManagedObject] {
                 
-                if let routineDataJSON = routineDataModel.value(forKey: RoutineDataModel.Key.routineDataJSON) as? Decoder {
-                    if let routineData = try? RoutineData(from: routineDataJSON) {
-                        if routineData.checkID(routineID: id, dateID: date) {
+                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Decoder {
+                    if let routineData = try? RoutineData(from: routineJSONData) {
+                        if routineData.checkID(routineID: routineID, dateID: dateID) {
                             return routineData
                         }
                     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A335" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="RoutineDataModel" representedClassName="RoutineDataModel" syncable="YES" codeGenerationType="class">
-        <attribute name="routineDataJSON" optional="YES" attributeType="Binary"/>
+        <attribute name="routineJSONData" optional="YES" attributeType="Binary"/>
     </entity>
 </model>

@@ -13,7 +13,8 @@ import CoreData
 public class RoutineDataModel: NSManagedObject {
     
     static let className: String = "RoutineDataModel"
+    
     enum Key {
-        static let routineDataJSON = "routineDataJSON"
+        static let routineJSONData = "routineJSONData"
     }
 }

@@ -28,19 +28,39 @@ import Foundation
 
 typealias RoutineID = UUID
 
-struct RoutineData: Codable {
+struct RoutineData: Codable, CustomStringConvertible {
     
+    var description: String {
+        let stopDate = "\(stopDate ?? "미설정")"
+        let alarm = "\(alarm ?? "미설정")"
+        
+        return """
+        [Routine]
+        id: \(self.id)
+        title: \(self.title)
+        color: \(self.color)
+        sticker: \(self.sticker)
+        startDate: \(self.startDate)
+        stopDate: \(stopDate)
+        repeatation: \(String(describing: self.repeatation))
+        alarm: \(alarm)
+        """
+    }
+    
+    //ID
     let id: RoutineID
     
-    //루틴보드 뷰 용 데이터
+    //뷰 값
     var title: String
     var color: BoardColor
     var sticker: String
-
+    
+    //날짜 값
     let startDate: Date
     var stopDate: Date?
     var repeatation: Repeatation
     
+    //알림 값
     var alarm: String?
     
     func jsonData() -> Data? {
@@ -51,15 +71,6 @@ struct RoutineData: Codable {
         return jsonData
     }
     
-    func isScheduled(date: Date) -> Bool {
-        //자체로직 구현
-        return false
-    }
-        
-    func checkID(routineID: UUID, dateID: Date) -> Bool {
-        self.id == routineID && self.startDate == dateID 
-    }
-
     init(id: RoutineID = UUID(),
          title: String,
          color: BoardColor,
@@ -102,3 +113,32 @@ struct RoutineData: Codable {
     }
 }
 
+//MARK: - RoutineData 검증 메서드
+extension RoutineData {
+    
+    ///루틴ID와 날짜ID를 통한 검증
+    ///
+    func checkID(routineID: UUID, dateID: Date) -> Bool {
+        self.id == routineID && self.startDate == dateID
+    }
+    
+    ///입력 날짜에 적합한 루틴인지 검증
+    ///
+    func isScheduled(date: Date) -> Bool {
+        guard repeatation.contains(date),
+              isAfterStart(date),
+              isntStop(date) else { return false }
+        
+        return true
+    }
+    
+    // 생성 날짜를 통한 검증
+    private func isAfterStart(_ date: Date) -> Bool {
+        return date >= startDate
+    }
+    
+    // 중단 날짜를 통한 검증
+    private func isntStop(_ date: Date) -> Bool {
+        return date < stopDate
+    }
+}

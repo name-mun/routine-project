@@ -19,6 +19,17 @@ enum Repeatation: Codable {
     case weeklyDay(Set<WeeklyDay>)
     case monthlyDay(Set<Int>)
     
+    func contains(_ date: Date) -> Bool {
+        switch self {
+        case .monthlyDay(let monthlyDays):
+            let monthlyDay = Calendar.current.component(.day, from: date)
+            return monthlyDays.contains(monthlyDay)
+        case .weeklyDay(let weeklyDays):
+            let weeklyDay = WeeklyDay(date: date)
+            return weeklyDays.contains(weeklyDay)
+        }
+    }
+    
     ///요일 데이터 형식
     ///
     ///monday = 0, sunday = 6
