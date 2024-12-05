@@ -15,3 +15,5 @@ typealias RoutineID = UUID
 
 //Alarm 타입
 typealias Alarm = String
+
+let mockDate = Date()

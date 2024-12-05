@@ -67,8 +67,7 @@ enum Repeatation: Codable, CustomStringConvertible {
             case .sunday: return "일"
             }
         }
-        
-        
+                
         static func < (lhs: Repeatation.WeeklyDay, rhs: Repeatation.WeeklyDay) -> Bool {
             lhs.rawValue < rhs.rawValue
         }

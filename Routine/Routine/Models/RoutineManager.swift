@@ -5,7 +5,8 @@
 //  Created by t2023-m0072 on 11/30/24.
 //
 
-import Foundation
+import UIKit
+
 import CoreData
 
 ///
@@ -35,7 +36,11 @@ import CoreData
 ///
 class RoutineManager {
     
-    let container = NSPersistentContainer()
+    init(container: NSPersistentContainer) {
+        self.container = container
+    }
+    
+    private var container: NSPersistentContainer
     
     /// RoutineData를 입력받아 인코딩 후 CoreData에 저장
     func create(_ routineData: RoutineData) {
@@ -57,17 +62,16 @@ class RoutineManager {
     }
     
     /// id:RoutineID(UUID) 와 startDate: Date 를 입력받아 RoutineData 를 반환
-    func read(routineID: RoutineID, dateID: Date) -> RoutineData? {
+    func read(date: Date) -> [RoutineData] {
+        var routineDatas: [RoutineData] = []
         
         do {
             let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
-            
             for routineDataModel in routineDataModels as [NSManagedObject] {
-                
-                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Decoder {
-                    if let routineData = try? RoutineData(from: routineJSONData) {
-                        if routineData.checkID(routineID: routineID, dateID: dateID) {
-                            return routineData
+                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Data {
+                    if let routineData = try? JSONDecoder().decode(RoutineData.self, from: routineJSONData) {
+                        if routineData.isScheduled(date) {
+                            routineDatas.append(routineData)
                         }
                     }
                 }
@@ -77,7 +81,7 @@ class RoutineManager {
             print("error - \(error.localizedDescription)")
         }
         
-        return nil
+        return routineDatas
     }
     
     //

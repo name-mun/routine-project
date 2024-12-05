@@ -6,7 +6,6 @@ class SnakeFlowLayout: UICollectionViewFlowLayout {
   
   private var cachedAttributes: [UICollectionViewLayoutAttributes] = []
   
-  
   override func prepare() {
     super.prepare()
     
@@ -35,7 +34,6 @@ class SnakeFlowLayout: UICollectionViewFlowLayout {
     
     // 섹션의 아이템 수를 통한 반복문
     for item in 0..<numberOfItems {
-      print(item)
       //0번 섹션의 item 번째 indexPath 생성
       let indexPath = IndexPath(item: item, section: 0)
       
@@ -76,22 +74,10 @@ class SnakeFlowLayout: UICollectionViewFlowLayout {
   
 //  
   override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-    for i in cachedAttributes.enumerated() {
-      let element = i.element
-      print("\(i.offset)번째 셀 -",
-            [(element.frame.minX.rounded(), element.frame.minY.rounded()),
-             (element.frame.maxX.rounded(), element.frame.maxY.rounded())])
-    }
-    
     return cachedAttributes.filter { rect.intersects($0.frame) }
   }
   
   override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-    
-    //        print(indexPath.item,
-    //              cachedAttributes[indexPath.item],
-    //              cachedAttributes[indexPath.item-19])
-    
     return cachedAttributes[indexPath.item]
   }
   

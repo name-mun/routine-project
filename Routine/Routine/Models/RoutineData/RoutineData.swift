@@ -13,7 +13,8 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
     static let mock = RoutineData(title: "제목",
                                   color: .white,
                                   sticker: "applelogo",
-                                  repeatation: .weeklyDay([.monday, .tuesday, .sunday]))
+                                  startDate: mockDate,
+                                  repeatation: .weeklyDay([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]))
     
     //식별자 - RoutineID(타입별칭)
     let id: RoutineID
