@@ -7,30 +7,35 @@
 
 import Foundation
 
-/*
- 1. 제목: String (default: "")
- 2. 색상: Color (default: white)
- 3. 스티커: String (default: "heart") - UIImage(systemName:)
- 4. 반복: Repeatation (allTime)
- 5. 알림: Time?
- 6. 중단: Date?
- 
- 날짜 눌렀을 때, 루틴 데이터 검증
- 
- 생성일자?
- 주기 -> (생성일자) 기준으로 생성
- and 생성일자 기준으로 로드해야함
- 
- 날짜 선택시 해당날짜 요일을 변환 -> 요일 기준
- Date.
- 
- */
-typealias AssetName = String
-typealias RoutineID = UUID
-
 struct RoutineData: Codable, CustomStringConvertible, Equatable {
-//    
-
+    
+    ///테스트용 Mock
+    static let mock = RoutineData(title: "제목",
+                                  color: .white,
+                                  sticker: "applelogo",
+                                  repeatation: .weeklyDay([.monday, .tuesday, .sunday]))
+    
+    //식별자 - RoutineID(타입별칭)
+    let id: RoutineID
+    
+    //제목
+    var title: String
+    //보드 색
+    var color: BoardColor
+    //스티커 - AssetName(타입별칭)
+    var sticker: AssetName
+    
+    //시작날짜(DataID)
+    let startDate: Date
+    //중단날짜(nil일 경우 중단 미설정)
+    var stopDate: Date?
+    //반복주기
+    var repeatation: Repeatation
+    //알람 (미구현) - Alarm(타입별칭)
+    var alarm: Alarm?
+    
+    
+    ///print, String(describing:) - 데이터 확인용
     var description: String {
         let stopDate = "\(String(describing: stopDate))"
         let alarm = "\(alarm ?? "미설정")"
@@ -48,22 +53,6 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         """
     }
     
-    //ID
-    let id: RoutineID
-    
-    //뷰 값
-    var title: String
-    var color: BoardColor
-    var sticker: String
-    
-    //날짜 값
-    let startDate: Date
-    var stopDate: Date?
-    var repeatation: Repeatation
-    
-    //알림 값
-    var alarm: String?
-    
     ///JSONData로 인코딩 후 반환
     ///
     func jsonData() -> Data? {
@@ -74,20 +63,22 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         return jsonData
     }
     
+    ///루틴ID와 날짜ID를 통해 비교
+    ///
     static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
         return lhs.id == rhs.id && lhs.startDate == rhs.startDate
-
     }
     
-    
+    /// 루틴 에디터 뷰를 통해 생성 시 사용
+    ///
     init(id: RoutineID = UUID(),
          title: String,
          color: BoardColor,
-         sticker: String,
+         sticker: AssetName,
          startDate: Date = Date(),
          stopDate: Date? = nil,
          repeatation: Repeatation,
-         alarm: String? = nil) {
+         alarm: Alarm? = nil) {
         self.id = id
         self.title = title
         self.color = color
@@ -98,6 +89,8 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         self.alarm = alarm
     }
     
+    /// RoutineManager CoreData 디코딩시 사용
+    ///
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(RoutineID.self, forKey: .id)
@@ -109,44 +102,27 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         self.stopDate = try container.decodeIfPresent(Date.self, forKey: .stopDate)
         self.repeatation = try container.decode(Repeatation.self, forKey: .repeatation)
     }
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case color
-        case sticker
-        case startDate = "start_date"
-        case stopDate = "stop_date"
-        case repeatation
-        case alarm
-    }
 }
 
+
 //MARK: - RoutineData 검증 메서드
+
 extension RoutineData {
     
-    ///루틴ID와 날짜ID를 통한 검증
-    ///
-    func checkID(routineID: UUID, dateID: Date) -> Bool {
-        self.id == routineID && self.startDate == dateID
-    }
-    
-    ///입력 날짜에 적합한 루틴인지 검증
-    ///
-    func isScheduled(date: Date) -> Bool {
+    ///입력 날짜에 적합한 루틴인지 확인
+    func isScheduled(_ date: Date) -> Bool {
         guard repeatation.contains(date),
               isAfterStart(date),
               isntStop(date) else { return false }
-        
         return true
     }
     
-    // 생성 날짜를 통한 검증
+    //생성 날짜를 통한 확인 메서드
     private func isAfterStart(_ date: Date) -> Bool {
         return date >= startDate
     }
     
-    // 중단 날짜를 통한 검증
+    //중단 날짜를 통한 확인 메서드
     private func isntStop(_ date: Date) -> Bool {
         guard let stopDate = self.stopDate else { return true }
         return date < stopDate
