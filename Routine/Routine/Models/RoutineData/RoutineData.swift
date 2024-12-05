@@ -35,7 +35,6 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
     //알람 (미구현) - Alarm(타입별칭)
     var alarm: Alarm?
     
-    
     ///print, String(describing:) - 데이터 확인용
     var description: String {
         let stopDate = "\(String(describing: stopDate))"
