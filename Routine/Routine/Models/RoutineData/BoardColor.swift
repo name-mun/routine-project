@@ -11,7 +11,7 @@ import UIKit
 ///
 ///getColor() 메서드를 통해 UIColor를 반환
 ///
-enum BoardColor: Codable {
+enum BoardColor: Codable, CaseIterable, Comparable {
     
     case white
     case yello

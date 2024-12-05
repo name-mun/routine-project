@@ -15,7 +15,10 @@ import Foundation
 ///
 enum Repeatation: Codable, CustomStringConvertible {
     
-    ///
+    case weeklyDay(Set<WeeklyDay>)
+    case monthlyDay(Set<Int>)
+    
+    ///print, String(describing:) 에서 사용될 형태 - 데이터 확인용
     var description: String {
         switch self {
         case .monthlyDay(let monthlyDay):
@@ -39,17 +42,11 @@ enum Repeatation: Codable, CustomStringConvertible {
         }
     }
     
-    //순서 보장 x
-    case weeklyDay(Set<WeeklyDay>)
-    case monthlyDay(Set<Int>)
     
     ///요일 데이터 형식
     ///
     ///monday = 0, sunday = 6
     enum WeeklyDay: Int, Codable, CaseIterable, CustomStringConvertible, Comparable {
-        static func < (lhs: Repeatation.WeeklyDay, rhs: Repeatation.WeeklyDay) -> Bool {
-            lhs.rawValue < rhs.rawValue
-        }
         
         case monday = 0
         case tuesday
@@ -69,6 +66,11 @@ enum Repeatation: Codable, CustomStringConvertible {
             case .saturday: return "토"
             case .sunday: return "일"
             }
+        }
+        
+        
+        static func < (lhs: Repeatation.WeeklyDay, rhs: Repeatation.WeeklyDay) -> Bool {
+            lhs.rawValue < rhs.rawValue
         }
         
         init(date: Date) {
