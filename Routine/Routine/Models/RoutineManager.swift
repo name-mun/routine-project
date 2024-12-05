@@ -36,11 +36,14 @@ import CoreData
 ///
 class RoutineManager {
     
-    init(container: NSPersistentContainer) {
-        self.container = container
-    }
+    static let shared = RoutineManager()
     
-    private var container: NSPersistentContainer
+    private init() {}
+    
+    private lazy var container: NSPersistentContainer = {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.persistentContainer
+    }()
     
     /// RoutineData를 입력받아 인코딩 후 CoreData에 저장
     func create(_ routineData: RoutineData) {
@@ -69,33 +72,28 @@ class RoutineManager {
             let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
             for routineDataModel in routineDataModels as [NSManagedObject] {
                 if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Data {
-                    if let routineData = try? JSONDecoder().decode(RoutineData.self, from: routineJSONData) {
-                        if routineData.isScheduled(date) {
-                            routineDatas.append(routineData)
-                        }
+                    if let routineData = RoutineData(by: routineJSONData),
+                       routineData.isScheduled(date) {
+                        routineDatas.append(routineData)
                     }
                 }
-                
             }
         } catch let error {
             print("error - \(error.localizedDescription)")
         }
-        
         return routineDatas
     }
     
     //
     func update(routine: RoutineData) {
-        
         do {
             let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
             for routineDataModel in routineDataModels as [NSManagedObject] {
-                
-                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Decoder {
-                    if let routineData = try? RoutineData(from: routineJSONData) {
-                        if routineData == routine {
-                            routineDataModel.setValue(routine, forKey: RoutineDataModel.Key.routineJSONData)
-                        }
+                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Data {
+                    if let routineData = RoutineData(by: routineJSONData),
+                       routineData == routine {
+                        routineDataModel.setValue(routine,
+                                                  forKey: RoutineDataModel.Key.routineJSONData)
                     }
                 }
             }
@@ -112,20 +110,18 @@ class RoutineManager {
             let routineDataModels = try self.container.viewContext.fetch(RoutineDataModel.fetchRequest())
             for routineDataModel in routineDataModels as [NSManagedObject] {
                 
-                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Decoder {
-                    if let routineData = try? RoutineData(from: routineJSONData) {
-                        if routineData.id == id {
-                            self.container.viewContext.delete(routineDataModel)
-                        }
+                if let routineJSONData = routineDataModel.value(forKey: RoutineDataModel.Key.routineJSONData) as? Data {
+                    if let routineData = RoutineData(by: routineJSONData) {
+                        self.container.viewContext.delete(routineDataModel)
                     }
                 }
             }
-            
             try container.viewContext.save()
         } catch let error {
             print("error - \(error.localizedDescription)")
         }
     }
+    
     
     func clearData() {
         do {

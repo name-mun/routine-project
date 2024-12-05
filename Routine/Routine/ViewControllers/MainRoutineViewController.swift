@@ -17,7 +17,7 @@ import SnapKit
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
     
-    private var routineManager: RoutineManager?
+    private var routineManager = RoutineManager.shared
     
     private var routineDatas: [(routine:RoutineData,
                                 result: RoutineResult)] = MockData.routineDatas
@@ -53,23 +53,8 @@ class MainRoutineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.routineManager = RoutineManager(container: appDelegate.persistentContainer)
-        
         self.view.backgroundColor = .gray
         setRoutineBoardCollectionView()
-        
-        guard let routineManager = self.routineManager else { return }
-        let mockData = MockData.routineDatas.map { $0.0 }
-        
-        mockData.forEach {
-            routineManager.create($0)
-            print("성공")
-        }
-        
-        let readDatas = routineManager.read(date: mockDate).map { $0.description }.joined(separator: "\n")
-        print(readDatas)
-        
     }
 }
 

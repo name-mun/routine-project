@@ -141,4 +141,6 @@ struct MockData {
         
         return datas
     }()
+    
+    static let date = Date()
 }

@@ -13,7 +13,7 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
     static let mock = RoutineData(title: "제목",
                                   color: .white,
                                   sticker: "applelogo",
-                                  startDate: mockDate,
+                                  startDate: MockData.date,
                                   repeatation: .weeklyDay([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]))
     
     //식별자 - RoutineID(타입별칭)
@@ -89,19 +89,14 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         self.repeatation = repeatation
         self.alarm = alarm
     }
-    
-    /// RoutineManager CoreData 디코딩시 사용
-    ///
-    init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(RoutineID.self, forKey: .id)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.color = try container.decode(BoardColor.self, forKey: .color)
-        self.sticker = try container.decode(String.self, forKey: .sticker)
-        self.alarm = try container.decodeIfPresent(String.self, forKey: .alarm)
-        self.startDate = try container.decode(Date.self, forKey: .startDate)
-        self.stopDate = try container.decodeIfPresent(Date.self, forKey: .stopDate)
-        self.repeatation = try container.decode(Repeatation.self, forKey: .repeatation)
+   
+    init?(by data: Data) {
+        let jsonDecoder = JSONDecoder()
+        guard let routineData = try? jsonDecoder.decode(RoutineData.self, from: data) else  {
+            return nil
+        }
+        
+        self = routineData
     }
 }
 
