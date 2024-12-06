@@ -16,7 +16,7 @@ extension RoutineDataModel {
         return NSFetchRequest<RoutineDataModel>(entityName: "RoutineDataModel")
     }
 
-    @NSManaged public var routineData: Data?
+    @NSManaged public var routineJSONData: Data?
 
 }
 

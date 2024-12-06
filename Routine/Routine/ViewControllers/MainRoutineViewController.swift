@@ -17,6 +17,8 @@ import SnapKit
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
     
+    private var routineManager = RoutineManager.shared
+    
     private var routineDatas: [(routine:RoutineData,
                                 result: RoutineResult)] = MockData.routineDatas
     
@@ -53,7 +55,11 @@ class MainRoutineViewController: UIViewController {
         
         self.view.backgroundColor = .gray
         setRoutineBoardCollectionView()
+        
+        let routineTester = RoutineManagerTester()
+        routineTester.whole()
     }
+    
 }
 
 
@@ -85,7 +91,6 @@ extension MainRoutineViewController: UICollectionViewDataSource, UICollectionVie
         }
     }
     
-    //    func coll
 }
 
 

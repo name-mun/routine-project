@@ -61,7 +61,6 @@ extension RoutineSuggestionTableViewCell: UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoutineSuggestionCollectionViewCell.id, for: indexPath) as! RoutineSuggestionCollectionViewCell
-        print(indexPath)
         cell.configure(indexA: thisIndex, indexB: indexPath[1])
         
         return cell

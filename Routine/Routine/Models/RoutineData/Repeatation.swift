@@ -13,7 +13,11 @@ import Foundation
 ///
 ///monthlyDay(Set_Int) - 월간 반복
 ///
+///default - 주간 전체
+///
 enum Repeatation: Codable, CustomStringConvertible {
+    
+    static let `default` = weeklyDay(Set<WeeklyDay>(WeeklyDay.allCases))
     
     case weeklyDay(Set<WeeklyDay>)
     case monthlyDay(Set<Int>)
@@ -42,45 +46,4 @@ enum Repeatation: Codable, CustomStringConvertible {
         }
     }
     
-    
-    ///요일 데이터 형식
-    ///
-    ///monday = 0, sunday = 6
-    enum WeeklyDay: Int, Codable, CaseIterable, CustomStringConvertible, Comparable {
-        
-        case monday = 0
-        case tuesday
-        case wednesday
-        case thursday
-        case friday
-        case saturday
-        case sunday = 6
-        
-        var description: String {
-            switch self {
-            case .monday: return "월"
-            case .tuesday: return "화"
-            case .wednesday: return "수"
-            case .thursday: return "목"
-            case .friday: return "금"
-            case .saturday: return "토"
-            case .sunday: return "일"
-            }
-        }
-        
-        
-        static func < (lhs: Repeatation.WeeklyDay, rhs: Repeatation.WeeklyDay) -> Bool {
-            lhs.rawValue < rhs.rawValue
-        }
-        
-        init(date: Date) {
-            let dayOfWeekIndex = (Calendar.current.component(.weekday, from: date) + 5) % 7
-            
-            guard let dayOfWeek = WeeklyDay.init(rawValue: dayOfWeekIndex) else {
-                self = .sunday
-                return
-            }
-            self = dayOfWeek
-        }
-    }
 }
