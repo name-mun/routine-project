@@ -91,7 +91,7 @@ extension RoutineData: Equatable {
     func isScheduled(_ date: Date) -> Bool {
         guard repeatation.contains(date),
               isAfterStart(date),
-              isntStop(date) else { return false }
+              !isStop(date) else { return false }
         return true
     }
     
@@ -101,8 +101,8 @@ extension RoutineData: Equatable {
     }
     
     // 중단 날짜를 통한 확인 메서드
-    private func isntStop(_ date: Date) -> Bool {
-        guard let stopDate = self.stopDate else { return true }
-        return date < stopDate
+    private func isStop(_ date: Date) -> Bool {
+        guard let stopDate = self.stopDate else { return false }
+        return date >= stopDate
     }
 }

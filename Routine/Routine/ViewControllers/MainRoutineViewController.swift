@@ -56,6 +56,7 @@ class MainRoutineViewController: UIViewController {
         self.view.backgroundColor = .gray
         setRoutineBoardCollectionView()
     }
+    
 }
 
 
@@ -87,7 +88,6 @@ extension MainRoutineViewController: UICollectionViewDataSource, UICollectionVie
         }
     }
     
-    //    func coll
 }
 
 
