@@ -17,4 +17,12 @@ public class RoutineDataModel: NSManagedObject {
     enum Key {
         static let routineJSONData = "routineJSONData"
     }
+    
+    func setRoutine(_ data: Data) {
+        setValue(data, forKey: RoutineDataModel.Key.routineJSONData)
+    }
+    
+    func json() -> Data? {
+        return value(forKey: RoutineDataModel.Key.routineJSONData) as? Data
+    }
 }
