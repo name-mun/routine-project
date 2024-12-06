@@ -17,12 +17,13 @@ class RoutineManager {
     
     static let shared = RoutineManager()
     
-    private init() {}
-    
-    private lazy var container: NSPersistentContainer = {
+    private init() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        return appDelegate.persistentContainer
-    }()
+        self.container = appDelegate.persistentContainer
+        
+    }
+    
+    private let container: NSPersistentContainer
     
     private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className,
                                                          in: container.viewContext)
@@ -69,7 +70,6 @@ extension RoutineManager {
         }
         return !routineDatas.isEmpty ? routineDatas : nil
     }
-    
     
     /// RoutineData 를 입력받아 동일한 ID의 루틴을 교체
     func update(routine: RoutineData) {
@@ -146,3 +146,6 @@ extension RoutineManager {
     }
     
 }
+
+
+

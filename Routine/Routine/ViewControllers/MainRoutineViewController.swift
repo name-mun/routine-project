@@ -55,6 +55,9 @@ class MainRoutineViewController: UIViewController {
         
         self.view.backgroundColor = .gray
         setRoutineBoardCollectionView()
+        
+        let routineTester = RoutineManagerTester()
+        routineTester.whole()
     }
     
 }

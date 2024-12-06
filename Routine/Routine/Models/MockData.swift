@@ -142,5 +142,25 @@ struct MockData {
         return datas
     }()
     
-    static let date = Date()
+    static let uuid = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
+    
+    static let oldRoutine = RoutineData(id: Self.uuid,
+                                        title: "oldRoutine",
+                                        color: .blue,
+                                        sticker: "goforward.15.ar",
+                                        startDate: Self.date,
+                                        stopDate: nil,
+                                        repeatation: .default ,
+                                        alarm: nil)
+    
+    static let newRoutine = RoutineData(id: Self.uuid,
+                                        title: "newRoutine",
+                                        color: .red,
+                                        sticker: "applelogo",
+                                        startDate: Self.date,
+                                        stopDate: nil,
+                                        repeatation: .default,
+                                        alarm: nil)
+    
+    static let date = Date(timeIntervalSince1970: TimeInterval(0))
 }
