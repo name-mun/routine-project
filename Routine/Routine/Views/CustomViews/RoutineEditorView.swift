@@ -335,3 +335,6 @@ class RoutineEditorView: UIView {
     }
 }
 
+#Preview("TestEditViewController") {
+    TestEditViewController()
+}
