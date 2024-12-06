@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		231665552CE449320009B2C4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 231665542CE449320009B2C4 /* SnapKit */; };
-		2316655A2CE4493B0009B2C4 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231665592CE4493B0009B2C4 /* Then */; };
+		23B9AE862CFF33E000A79D3C /* RoutineDataModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9AE842CFF33E000A79D3C /* RoutineDataModel+CoreDataClass.swift */; };
+		23B9AE872CFF33E000A79D3C /* RoutineDataModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9AE852CFF33E000A79D3C /* RoutineDataModel+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,8 @@
 		233B22302CCE345500B02C46 /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		233B22462CCE345700B02C46 /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		233B22502CCE345700B02C46 /* RoutineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		23B9AE842CFF33E000A79D3C /* RoutineDataModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoutineDataModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		23B9AE852CFF33E000A79D3C /* RoutineDataModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoutineDataModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -84,7 +87,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				231665552CE449320009B2C4 /* SnapKit in Frameworks */,
-				2316655A2CE4493B0009B2C4 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +117,8 @@
 		233B22272CCE345500B02C46 = {
 			isa = PBXGroup;
 			children = (
+				23B9AE842CFF33E000A79D3C /* RoutineDataModel+CoreDataClass.swift */,
+				23B9AE852CFF33E000A79D3C /* RoutineDataModel+CoreDataProperties.swift */,
 				233B22322CCE345500B02C46 /* Routine */,
 				233B22492CCE345700B02C46 /* RoutineTests */,
 				233B22532CCE345700B02C46 /* RoutineUITests */,
@@ -155,7 +159,6 @@
 			name = Routine;
 			packageProductDependencies = (
 				231665542CE449320009B2C4 /* SnapKit */,
-				231665592CE4493B0009B2C4 /* Then */,
 			);
 			productName = Routine;
 			productReference = 233B22302CCE345500B02C46 /* Routine.app */;
@@ -241,7 +244,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				231665532CE449320009B2C4 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				231665582CE4493B0009B2C4 /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 233B22312CCE345500B02C46 /* Products */;
@@ -284,6 +286,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23B9AE862CFF33E000A79D3C /* RoutineDataModel+CoreDataClass.swift in Sources */,
+				23B9AE872CFF33E000A79D3C /* RoutineDataModel+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,14 +618,6 @@
 				minimumVersion = 5.6.0;
 			};
 		};
-		231665582CE4493B0009B2C4 /* XCRemoteSwiftPackageReference "Then" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/devxoul/Then.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -629,11 +625,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 231665532CE449320009B2C4 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		231665592CE4493B0009B2C4 /* Then */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 231665582CE4493B0009B2C4 /* XCRemoteSwiftPackageReference "Then" */;
-			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

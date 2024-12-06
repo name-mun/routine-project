@@ -128,3 +128,17 @@
 //  let viewController = MainRoutineViewController()
 //  return viewController
 //}
+
+import Foundation
+
+struct MockData {
+    static let routineDatas: [(RoutineData, RoutineResult)] = {
+        var datas:[(RoutineData, RoutineResult)]  = []
+            
+        (0...10).forEach { _ in
+            datas.append((RoutineData.mock, RoutineResult(id: UUID(), isCompleted: false)))
+        }
+        
+        return datas
+    }()
+}
