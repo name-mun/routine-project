@@ -330,12 +330,6 @@ class RoutineEditorView: UIView {
             $0.height.equalTo(40)
             $0.centerX.equalToSuperview()
         }
-
     }
-    */
-
 }
 
-#Preview("TestEditViewController") {
-    TestEditViewController()
-}
