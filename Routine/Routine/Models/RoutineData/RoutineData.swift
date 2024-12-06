@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct RoutineData: Codable, CustomStringConvertible, Equatable {
+struct RoutineData: JSONCodable, CustomStringConvertible {
     
     ///테스트용 Mock
     static let mock = RoutineData(title: "제목",
                                   color: .white,
                                   sticker: "applelogo",
                                   startDate: MockData.date,
-                                  repeatation: .weeklyDay([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]))
+                                  repeatation: .default)
     
     //식별자 - RoutineID(타입별칭)
     let id: RoutineID
@@ -35,7 +35,8 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
     //알람 (미구현) - Alarm(타입별칭)
     var alarm: Alarm?
     
-    ///print, String(describing:) - 데이터 확인용
+    /// print, String(describing:) - 데이터 확인용
+    ///
     var description: String {
         let stopDate = "\(String(describing: stopDate))"
         let alarm = "\(alarm ?? "미설정")"
@@ -51,22 +52,6 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         repeatation: \(String(describing: self.repeatation))
         alarm: \(alarm)
         """
-    }
-    
-    ///JSONData로 인코딩 후 반환
-    ///
-    func jsonData() -> Data? {
-        let jsonEncoder = JSONEncoder()
-        
-        let jsonData = try? jsonEncoder.encode(self)
-        
-        return jsonData
-    }
-    
-    ///루틴ID와 날짜ID를 통해 비교
-    ///
-    static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
-        return lhs.id == rhs.id && lhs.startDate == rhs.startDate
     }
     
     /// 루틴 에디터 뷰를 통해 생성 시 사용
@@ -88,21 +73,19 @@ struct RoutineData: Codable, CustomStringConvertible, Equatable {
         self.repeatation = repeatation
         self.alarm = alarm
     }
-   
-    init?(by data: Data) {
-        let jsonDecoder = JSONDecoder()
-        guard let routineData = try? jsonDecoder.decode(RoutineData.self, from: data) else  {
-            return nil
-        }
-        
-        self = routineData
-    }
+    
 }
 
 
 //MARK: - RoutineData 검증 메서드
 
-extension RoutineData {
+extension RoutineData: Equatable {
+    
+    /// 루틴ID와 날짜ID만을 비교 연산
+    ///
+    static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
+        return lhs.id == rhs.id && lhs.startDate == rhs.startDate
+    }
     
     ///입력 날짜에 적합한 루틴인지 확인
     func isScheduled(_ date: Date) -> Bool {
@@ -112,12 +95,12 @@ extension RoutineData {
         return true
     }
     
-    //생성 날짜를 통한 확인 메서드
+    // 생성 날짜를 통한 확인 메서드
     private func isAfterStart(_ date: Date) -> Bool {
         return date >= startDate
     }
     
-    //중단 날짜를 통한 확인 메서드
+    // 중단 날짜를 통한 확인 메서드
     private func isntStop(_ date: Date) -> Bool {
         guard let stopDate = self.stopDate else { return true }
         return date < stopDate
