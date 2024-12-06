@@ -83,7 +83,7 @@ struct RoutineManagerTester {
     
     private func testStartPrint(_ methodName: String) {
         print("\n================================",
-              "🎯 Test RoutineManager.\(methodName) 🎯\n", separator: "\n")
+              "🎯 Test RoutineManager.\(methodName) 🎯", separator: "\n")
     }
     
     
