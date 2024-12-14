@@ -9,7 +9,7 @@ import UIKit
 
 ///보드 컬러 열거형
 ///
-///getColor() 메서드를 통해 UIColor를 반환
+///uiColor() 메서드를 통해 UIColor를 반환
 ///
 enum BoardColor: Codable, CaseIterable, Comparable {
     
@@ -19,13 +19,43 @@ enum BoardColor: Codable, CaseIterable, Comparable {
     case green
     case red
 
-    func get() -> UIColor {
+    func uiColor() -> UIColor {
         switch self {
-        case .white: return UIColor.white
-        case .yello: return UIColor.systemYellow
-        case .blue: return UIColor.blue
-        case .green: return UIColor.green
-        case .red: return UIColor.red
+        case .white:
+            return UIColor(red: cgFloat(200),
+                           green: cgFloat(150),
+                           blue: cgFloat(200),
+                           alpha: 1)
+            
+        case .yello:
+            return UIColor(red: cgFloat(150),
+                           green: cgFloat(200),
+                           blue: cgFloat(255),
+                           alpha: 1)
+            
+        case .blue:
+            return UIColor(red: cgFloat(130),
+                           green: cgFloat(170),
+                           blue: cgFloat(200),
+                           alpha: 1)
+            
+        case .green:
+            return UIColor(red: cgFloat(170),
+                           green: cgFloat(200),
+                           blue: cgFloat(255),
+                           alpha: 1)
+            
+        case .red:
+            return UIColor(red: cgFloat(160),
+                           green: cgFloat(170),
+                           blue: cgFloat(230),
+                           alpha: 1)
         }
     }
+    
+    private func cgFloat(_ value: Int) -> CGFloat {
+        guard value < 256 else { return 1 }
+        return CGFloat(value) / 255
+    }
+    
 }

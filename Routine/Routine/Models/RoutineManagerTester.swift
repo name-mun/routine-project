@@ -27,7 +27,7 @@ struct RoutineManagerTester {
     private func creat() {
         testStartPrint("creat")
         routineManager.create(oldValue)
-        let oldRoutine = routineManager.read(date: MockData.date)
+        let oldRoutine = routineManager.read(of: MockData.date)
         if oldRoutine.count == 1,
            oldRoutine[0] == oldValue {
             testResultPrint("creat", result: true)
@@ -49,7 +49,7 @@ struct RoutineManagerTester {
     private func update() {
         testStartPrint("update")
         routineManager.update(routine: newValue)
-        let newRoutine = routineManager.read(date: MockData.date)
+        let newRoutine = routineManager.read(of: MockData.date)
         if newRoutine.count == 1,
            newRoutine[0] == newValue {
             testResultPrint("update", result: true)

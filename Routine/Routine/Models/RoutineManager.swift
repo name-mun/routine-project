@@ -52,7 +52,7 @@ extension RoutineManager {
     }
     
     /// 선택날짜에 해당하는 [RoutineData] 반환
-    func read(date: Date) -> [RoutineData] {
+    func read(of date: Date) -> [RoutineData] {
         var routineDatas: [RoutineData] = []
         
         do {
