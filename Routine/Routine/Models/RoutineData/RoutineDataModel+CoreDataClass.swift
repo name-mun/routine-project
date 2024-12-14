@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 import CoreData
 
 @objc(RoutineDataModel)
@@ -22,7 +23,19 @@ public class RoutineDataModel: NSManagedObject {
         setValue(data, forKey: RoutineDataModel.Key.routineJSONData)
     }
     
+    func setRoutineData(_ routineData: RoutineData) {
+        let jsonData = routineData.json()
+        setValue(jsonData, forKey: RoutineDataModel.Key.routineJSONData)
+    }
+    
     func json() -> Data? {
         return value(forKey: RoutineDataModel.Key.routineJSONData) as? Data
+    }
+    
+    func convert() -> RoutineData? {
+        guard let routineJSONData = self.json(),
+              let routineData = RoutineData(from: routineJSONData) else { return nil}
+        
+        return routineData
     }
 }

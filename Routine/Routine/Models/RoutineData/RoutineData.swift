@@ -83,7 +83,6 @@ struct RoutineData: JSONCodable, CustomStringConvertible {
 extension RoutineData: Equatable {
     
     /// 루틴ID와 날짜ID만을 비교 연산
-    ///
     static func == (lhs: RoutineData, rhs: RoutineData) -> Bool {
         return lhs.id == rhs.id && lhs.startDate == rhs.startDate
     }
@@ -109,7 +108,7 @@ extension RoutineData: Equatable {
 
 }
 
-extension Date {
+private extension Date {
     
     func yyyyMMdd() -> String {
         let year = Calendar.current.component(.year, from: self)

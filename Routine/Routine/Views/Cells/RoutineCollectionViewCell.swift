@@ -41,7 +41,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
     }()
     
     // 스티커 이미지 뷰
-    private let stickerView: UIImageView = {
+    private let stickerImageView: UIImageView = {
         let imageView = UIImageView()
         
         imageView.contentMode = .bottom
@@ -62,6 +62,27 @@ class RoutineCollectionViewCell: UICollectionViewCell {
         
         return imageView
     }()
+
+    
+    override func prepareForReuse() {
+        resetData()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+}
+
+
+//MARK: - 외부 사용 메서드
+
+extension RoutineCollectionViewCell {
     
     /// 셀 데이터 적용
     func configureData(_ routine: RoutineData) {
@@ -75,23 +96,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
         layer.maskedCorners = position.maskedCorner()
     }
     
-    override func prepareForReuse() {
-        resetData()
-        updateData()
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        configureUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
 }
-
 
 //MARK: - 레이아웃 설정
 
@@ -107,39 +112,43 @@ extension RoutineCollectionViewCell {
 
         [
             titleLabel,
-            stickerView
+            stickerImageView
         ].forEach { stackView.addArrangedSubview($0) }
         
+        // 중단 마크 레이아웃 설정
+        stopMarkImageView.snp.makeConstraints { imageView in
+            imageView.trailing.top.equalToSuperview().inset(8)
+            imageView.size.equalTo(15)
+        }
+        
+        // 전체 스택 뷰 레이아웃 설정
         stackView.snp.makeConstraints { stackView in
             stackView.center.size.equalToSuperview()
         }
-
+        
+        // 루틴 제목 라벨 레이아웃 설정
         titleLabel.snp.makeConstraints { titleLabel in
             titleLabel.leading.trailing.equalToSuperview().inset(20)
             titleLabel.height.equalToSuperview().multipliedBy(0.7)
             titleLabel.centerX.equalToSuperview()
         }
 
-        stickerView.snp.makeConstraints { imageView in
+        // 스티커 이미지 뷰 레이아웃 설정
+        stickerImageView.snp.makeConstraints { imageView in
             imageView.height.equalToSuperview().multipliedBy(0.3)
             imageView.centerX.equalToSuperview()
         }
 
-        stopMarkImageView.snp.makeConstraints { imageView in
-            imageView.trailing.top.equalToSuperview().inset(8)
-            imageView.size.equalTo(15)
-        }
-
-        self.clipsToBounds = true
-        self.layer.cornerRadius = Self.cornerRadius
-
-        self.layer.borderWidth = Self.borderWidth
-        self.layer.borderColor = UIColor.black.cgColor
+        clipsToBounds = true
+        layer.cornerRadius = Self.cornerRadius
+        layer.borderWidth = Self.borderWidth
+        layer.borderColor = UIColor.black.cgColor
     }
+    
     
 }
 
-//MARK: - prepare for reuse
+//MARK: - 셀 재사용 시 사용 메서드
 
 extension RoutineCollectionViewCell {
 
@@ -147,7 +156,7 @@ extension RoutineCollectionViewCell {
     private func resetData() {
         routine = nil
         backgroundColor = .clear
-        stickerView.image = nil
+        stickerImageView.image = nil
         titleLabel.text = nil
         stopMarkImageView.isHidden = true
     }
@@ -155,7 +164,7 @@ extension RoutineCollectionViewCell {
 }
 
 
-//MARK: - Update Data
+//MARK: - 뷰 업데이트 메서드
 
 extension RoutineCollectionViewCell {
 
@@ -183,7 +192,7 @@ extension RoutineCollectionViewCell {
     private func updateStickerImageView(_ assetName: AssetName) {
         guard let stickerImage = UIImage(systemName: assetName)?
             .withRenderingMode(.alwaysOriginal) else { return }
-        self.stickerView.image = stickerImage
+        self.stickerImageView.image = stickerImage
     }
 
     // 루틴 중단마크 업데이트

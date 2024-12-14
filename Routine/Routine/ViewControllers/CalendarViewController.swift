@@ -9,29 +9,13 @@ import UIKit
 
 import SnapKit
 
-// 날짜 선택 화면 ViewController (모달)
+/// 날짜 선택 화면 ViewController
 class CalendarViewController: UIViewController {
     
-    var onDatePick: ((Date) -> Void)?
+    // dismiss 시 실행 클로저
+    var onDismiss: ((Date) -> Void)?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.backgroundColor = .white
-    
-        [
-            datePicker,
-        ].forEach {
-            self.view.addSubview($0) }
-        
-        datePicker.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
-            $0.height.equalTo(400)
-        }
-
-    }
-    
+    // 데이터 피커
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         
@@ -42,16 +26,47 @@ class CalendarViewController: UIViewController {
         return datePicker
     }()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         let date = self.datePicker.date
-        
-        onDatePick?(date)
+        onDismiss?(date)
     }
     
 }
 
-#Preview {
-    CalendarViewController()
+//MARK: - UI 설정
+
+extension CalendarViewController {
+
+    // 전체 UI 설정
+    private func configureUI() {
+        self.view.backgroundColor = .white
+        
+        [
+            datePicker
+        ].forEach { view.addSubview($0) }
+        
+        datePicker.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.top.equalToSuperview()
+            $0.height.equalTo(400)
+        }
+    }
+
+}
+
+//MARK: - 외부 사용 메서드
+
+extension CalendarViewController {
+    
+    func setDate(_ date: Date) {
+        self.datePicker.date = date
+    }
+    
 }

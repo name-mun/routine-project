@@ -137,7 +137,8 @@ extension MainRoutineViewController {
     private func calendarModalButtonTapped() {
         let calendarViewController = CalendarViewController()
         
-        calendarViewController.onDatePick = { [weak self] date in
+        calendarViewController.setDate(date)
+        calendarViewController.onDismiss = { [weak self] date in
             self?.updateDate(date)
         }
         

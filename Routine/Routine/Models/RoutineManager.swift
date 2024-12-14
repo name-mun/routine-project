@@ -20,7 +20,6 @@ class RoutineManager {
     private init() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.container = appDelegate.persistentContainer
-        
     }
     
     private let container: NSPersistentContainer
@@ -28,21 +27,15 @@ class RoutineManager {
     private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className,
                                                          in: container.viewContext)
     
-    
 }
 
 //MARK: - CRUD 메서드 ( + reset )
+
 extension RoutineManager {
     
     /// RoutineData를 입력받아 인코딩 후 CoreData에 저장
     func create(_ routineData: RoutineData) {
-        guard let routine = routineData.json(),
-              let entity else { return }
-        
-        if let routineDataModel = NSManagedObject(entity: entity,
-                                                  insertInto: container.viewContext) as? RoutineDataModel {
-            routineDataModel.setRoutine(routine)
-        }
+        saveRoutineData(routineData)
         
         do {
             try save()
@@ -51,15 +44,15 @@ extension RoutineManager {
         }
     }
     
-    /// 선택날짜에 해당하는 [RoutineData] 반환
+    /// 입력 날짜에 해당하는 루틴 데이터 배열 반환
     func read(of date: Date) -> [RoutineData] {
         var routineDatas: [RoutineData] = []
         
         do {
             let routineDataModels = try fetchRoutineDataModel()
-            for routineDataModel in routineDataModels {
-                if let routineJSONData = routineDataModel.json(),
-                   let routineData = RoutineData(from: routineJSONData),
+            
+            routineDataModels.forEach { routineDataModel in
+                if let routineData = routineDataModel.convert(),
                    routineData.isScheduled(date) {
                     routineDatas.append(routineData)
                 }
@@ -71,16 +64,15 @@ extension RoutineManager {
         return routineDatas
     }
     
-    /// RoutineData 를 입력받아 동일한 ID의 루틴을 교체
+    /// 루틴ID, 날짜ID 를 통해 식별 후 데이터 업데이트
     func update(routine: RoutineData) {
         do {
             let routineDataModels = try fetchRoutineDataModel()
-            for routineDataModel in routineDataModels {
-                if let routineJSONData = routineDataModel.json(),
-                   let currentRoutine = RoutineData(from: routineJSONData),
-                   currentRoutine == routine,
-                   let routineData = routine.json() {
-                    routineDataModel.setRoutine(routineData)
+            
+            routineDataModels.forEach { routineDataModel in
+                if let currentRoutine = routineDataModel.convert(),
+                   currentRoutine == routine {
+                    routineDataModel.setRoutineData(routine)
                 }
             }
             
@@ -89,19 +81,16 @@ extension RoutineManager {
             print("update: error - \(error.localizedDescription)")
         }
     }
-    
-    // RoutineID(UUID) 를 입력받아 루틴을 제거
+
+    /// 루틴ID, 날짜ID 를 통해 식별 후 삭제
     func delete(_ routine: RoutineData) {
         
         do {
             let routineDataModels = try fetchRoutineDataModel()
-            for routineDataModel in routineDataModels {
-                //
-                if let routineJSONData = routineDataModel.json(),
-                   let routineData = RoutineData(from: routineJSONData),
-                   routine == routineData {
-                    deleteRoutine(routineDataModel)
-                }
+            
+            routineDataModels.forEach { routineDataModel in
+                if let routineData = routineDataModel.convert(),
+                   routine == routineData { deleteRoutine(routineDataModel) }
             }
             
             try save()
@@ -110,11 +99,12 @@ extension RoutineManager {
         }
     }
     
-    // 전체 루틴 데이터 초기화
+    /// 전체 루틴 데이터 초기화
     func reset() {
         do {
             let routineDataModels = try fetchRoutineDataModel()
-            for routineDataModel in routineDataModels {
+            
+            routineDataModels.forEach { routineDataModel in
                 deleteRoutine(routineDataModel)
             }
             
@@ -127,7 +117,18 @@ extension RoutineManager {
 
 
 //MARK: 내부 사용 메서드
+
 extension RoutineManager {
+    
+    // 루틴 데이터 모델 저장
+    private func saveRoutineData(_ routineData: RoutineData){
+        guard let entity,
+              let routineDataModel = NSManagedObject(entity: entity,
+                                                     insertInto: container.viewContext)
+                as? RoutineDataModel else { return }
+        
+        routineDataModel.setRoutineData(routineData)
+    }
     
     // 루틴데이터 전체 불러오기
     private func fetchRoutineDataModel() throws -> [RoutineDataModel] {
@@ -143,7 +144,7 @@ extension RoutineManager {
     private func deleteRoutine(_ routineDataModel: RoutineDataModel) {
         self.container.viewContext.delete(routineDataModel)
     }
-    
+ 
 }
 
 

@@ -19,7 +19,7 @@ struct RoutineManagerTester {
         routineManager.reset()
         
         creat()
-        read()
+//        read()
         update()
         delete()
     }
@@ -35,16 +35,15 @@ struct RoutineManagerTester {
             testResultPrint("creat", result: false)
         }
     }
-    
-    private func read() {
+//    
+//    private func read() {
 //        testStartPrint("read")
-//        nil != routineManager.read(date: MockData.date)
-//        if  {
+//        if routineManager.read(of: MockData.date) {
 //            testResultPrint("read", result: true)
 //        } else {
 //            testResultPrint("read", result: false)
 //        }
-    }
+//    }
     
     private func update() {
         testStartPrint("update")
