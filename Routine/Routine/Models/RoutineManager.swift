@@ -52,7 +52,7 @@ extension RoutineManager {
     }
     
     /// 선택날짜에 해당하는 [RoutineData] 반환
-    func read(date: Date) -> [RoutineData]? {
+    func read(date: Date) -> [RoutineData] {
         var routineDatas: [RoutineData] = []
         
         do {
@@ -68,7 +68,7 @@ extension RoutineManager {
         } catch let error {
             print("read: error - \(error.localizedDescription)")
         }
-        return !routineDatas.isEmpty ? routineDatas : nil
+        return routineDatas
     }
     
     /// RoutineData 를 입력받아 동일한 ID의 루틴을 교체

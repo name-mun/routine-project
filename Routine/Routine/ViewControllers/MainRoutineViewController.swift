@@ -19,6 +19,8 @@ import SnapKit
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
     
+    let goModal = UIButton()
+    
     private var routineManager = RoutineManager.shared
     
     private var routineDatas: [RoutineData] = []
@@ -63,13 +65,13 @@ class MainRoutineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .gray
+        self.view.backgroundColor = .white
+        
         setRoutineBoardCollectionView()
         setUpButton()
-//        routineManager.reset()
+        configureModalButton()
         
-        routineManager.create(MockData.newRoutine)
-        routineManager.create(MockData.currentRoutine)
+        routineManager.reset()
         
         configureDatas()
 
@@ -113,9 +115,36 @@ extension MainRoutineViewController {
     }
     
     private func configureDatas() {
-        guard let datas = routineManager.read(date: date) else { return }
+        let datas = routineManager.read(date: date)
+        
         self.routineDatas = datas
+        print(datas)
         self.routineCollectionView.reloadData()
+    }
+    
+    private func configureModalButton() {
+        goModal.backgroundColor = .black
+        
+        view.addSubview(goModal)
+        
+        goModal.addTarget(self, action: #selector(goNext), for: .touchDown)
+        goModal.snp.makeConstraints() {
+            $0.centerX.equalToSuperview()
+            $0.bottom.trailing.equalToSuperview().inset(30)
+        }
+    }
+    
+    @objc
+    private func goNext() {
+        
+        let modalVC = RoutineSuggestionViewController()
+        modalVC.onDismiss = { [weak self] in
+            self?.configureDatas()
+        }
+        
+        modalVC.modalPresentationStyle = .automatic
+        present(modalVC,animated: true, completion: nil)
+        
     }
 }
 

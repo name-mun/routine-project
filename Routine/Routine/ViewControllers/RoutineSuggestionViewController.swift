@@ -15,6 +15,8 @@ class RoutineSuggestionViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let addButton = UIButton()
     private let suggestionData = SuggestionData.mock
+    
+    var onDismiss: (() -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,6 +96,7 @@ class RoutineSuggestionViewController: UIViewController {
     }
 
     private func closeModal() {
+        onDismiss?()
         self.dismiss(animated: true)
     }
 

@@ -21,11 +21,11 @@ enum BoardColor: Codable, CaseIterable, Comparable {
 
     func get() -> UIColor {
         switch self {
-        case .white: return UIColor.white.withAlphaComponent(0.3)
-        case .yello: return UIColor.systemYellow.withAlphaComponent(0.3)
-        case .blue: return UIColor.blue.withAlphaComponent(0.3)
-        case .green: return UIColor.green.withAlphaComponent(0.3)
-        case .red: return UIColor.red.withAlphaComponent(0.3)
+        case .white: return UIColor.white
+        case .yello: return UIColor.systemYellow
+        case .blue: return UIColor.blue
+        case .green: return UIColor.green
+        case .red: return UIColor.red
         }
     }
 }
