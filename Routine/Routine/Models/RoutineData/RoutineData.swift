@@ -56,6 +56,7 @@ struct RoutineData: JSONCodable, CustomStringConvertible {
     
     /// 루틴 에디터 뷰를 통해 생성 시 사용
     ///
+    ///Date() 런타임
     init(id: RoutineID = UUID(),
          title: String,
          color: BoardColor,
@@ -97,12 +98,29 @@ extension RoutineData: Equatable {
     
     // 생성 날짜를 통한 확인 메서드
     private func isAfterStart(_ date: Date) -> Bool {
-        return date >= startDate
+        return date.yyyyMMdd() >= startDate.yyyyMMdd()
     }
     
     // 중단 날짜를 통한 확인 메서드
     private func isStop(_ date: Date) -> Bool {
         guard let stopDate = self.stopDate else { return false }
         return date >= stopDate
+    }
+
+}
+
+extension Date {
+    
+    func yyyyMMdd() -> String {
+        let year = Calendar.current.component(.year, from: self)
+        let month = Calendar.current.component(.month, from: self)
+        let day = Calendar.current.component(.day, from: self)
+        
+        let monthString = month < 10 ? "0" + "\(month)" : "\(month)"
+        let dayString = day < 10 ? "0" + "\(day)" : "\(day)"
+
+        let yyyyMMdd = ["\(year)", monthString, dayString].joined()
+
+        return yyyyMMdd
     }
 }

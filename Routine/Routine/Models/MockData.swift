@@ -155,12 +155,19 @@ struct MockData {
     
     static let newRoutine = RoutineData(id: Self.uuid,
                                         title: "newRoutine",
-                                        color: .red,
+                                        color: .yello,
                                         sticker: "applelogo",
                                         startDate: Self.date,
                                         stopDate: nil,
                                         repeatation: .default,
                                         alarm: nil)
+    
+    static let currentRoutine = RoutineData(title: "currentRoutine",
+                                            color: .green,
+                                            sticker: "applelogo",
+                                            stopDate: nil,
+                                            repeatation: .default,
+                                            alarm: nil)
     
     static let date = Date(timeIntervalSince1970: TimeInterval(0))
 }

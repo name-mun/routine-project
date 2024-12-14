@@ -6,10 +6,12 @@
 //
 
 import UIKit
+
 import SnapKit
 
 #Preview {
     MainRoutineViewController()
+    
 }
 
 //MARK: - MainRoutineViewController
@@ -19,8 +21,22 @@ class MainRoutineViewController: UIViewController {
     
     private var routineManager = RoutineManager.shared
     
-    private var routineDatas: [(routine:RoutineData,
-                                result: RoutineResult)] = MockData.routineDatas
+    private var routineDatas: [RoutineData] = []
+    
+    private var date: Date = Date.now
+    
+    private let datePickerModalButton: UIButton = {
+        let button = UIButton()
+        
+        let image = UIImage(systemName: "calendar")
+        button.setImage(image, for: .normal)
+        button.tintColor = .red
+        button.addTarget(nil,
+                         action: #selector(buttonTapped),
+                         for: .touchUpInside)
+        
+        return button
+    }()
     
     private let routineCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
@@ -41,13 +57,7 @@ class MainRoutineViewController: UIViewController {
         
         return collectionView
     }()
-    
-    private let dateCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
-        
-        return collectionView
-    }()
-    
+
     static private let collectionViewConstantAbs: CGFloat = 25
     
     override func viewDidLoad() {
@@ -55,13 +65,59 @@ class MainRoutineViewController: UIViewController {
         
         self.view.backgroundColor = .gray
         setRoutineBoardCollectionView()
+        setUpButton()
+//        routineManager.reset()
         
-        let routineTester = RoutineManagerTester()
-        routineTester.whole()
+        routineManager.create(MockData.newRoutine)
+        routineManager.create(MockData.currentRoutine)
+        
+        configureDatas()
+
     }
     
 }
 
+//MARK: - Button
+
+extension MainRoutineViewController {
+    
+    func setUpButton() {
+        view.addSubview(self.datePickerModalButton)
+        
+        datePickerModalButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            $0.width.height.equalTo(100)
+        }
+    }
+    
+    @objc
+    private func buttonTapped() {
+        let calendarViewController = CalendarViewController()
+        
+        calendarViewController.modalPresentationStyle = .pageSheet
+        
+        
+        calendarViewController.onDatePick = { [weak self] date in
+            self?.dateChange(date)
+        }
+        
+        sheetPresentationController?.detents = [.medium(), .large()]
+        
+        present(calendarViewController, animated: false)
+    }
+    
+    private func dateChange(_ date: Date) {
+        self.date = date
+        configureDatas()
+    }
+    
+    private func configureDatas() {
+        guard let datas = routineManager.read(date: date) else { return }
+        self.routineDatas = datas
+        self.routineCollectionView.reloadData()
+    }
+}
 
 //MARK: - RoutineBoardCollectionViewController
 extension MainRoutineViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -141,6 +197,7 @@ extension MainRoutineViewController {
 //MARK: - 루틴보드 컬렉션 뷰
 
 extension MainRoutineViewController {
+    
     private func routineBoardCollectionViewCell(_ indexPath: IndexPath) -> RoutineBoardCollectionViewCell {
         
         guard let routineBoardCollectionViewCell = self.routineCollectionView.dequeueReusableCell(withReuseIdentifier: RoutineBoardCollectionViewCell.cellID,
@@ -153,7 +210,7 @@ extension MainRoutineViewController {
             return RoutineBoardCollectionViewCell()
         }
         
-        let routine = self.routineDatas[index].routine
+        let routine = self.routineDatas[index]
         routineBoardCollectionViewCell.configureData(routine)
         routineBoardCollectionViewCell.configurePosition(indexPath: indexPath,
                                                          dataCount: routineDatas.count)

@@ -27,7 +27,6 @@ class RoutineSuggestionViewController: UIViewController {
         configurePageTitle()
         configureTableView()
         configureAddButton()
- 
     }
     
     func configurePageTitle() {
