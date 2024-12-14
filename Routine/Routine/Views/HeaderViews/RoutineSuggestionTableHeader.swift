@@ -11,20 +11,22 @@ import SnapKit
 class RoutineSuggestionTableHeader: UITableViewHeaderFooterView {
     let titleLabel = UILabel()
     let subtitleLabel = UILabel()
-    
+    var sectionTitle: String?
+    var subTitle: String?
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
     }
     
-    func configure(_ section: Int) {
+    func configure() {
         titleLabel.textColor = .black
         titleLabel.font = .boldSystemFont(ofSize: 20)
-        //titleLabel.text = RoutineSuggestionData.title[section]
+        titleLabel.text = sectionTitle
 
         subtitleLabel.textColor = .darkGray
         subtitleLabel.font = .systemFont(ofSize: 15)
-        //subtitleLabel.text = RoutineSuggestionData.subtitle[section]
+        subtitleLabel.text = subTitle
 
         contentView.addSubview(titleLabel)
         contentView.addSubview(subtitleLabel)

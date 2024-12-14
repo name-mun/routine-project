@@ -14,6 +14,11 @@ class TestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        configureModalButton()
+    }
+    
+    private func configureModalButton() {
         goModal.backgroundColor = .black
         
         view.addSubview(goModal)
@@ -23,7 +28,6 @@ class TestViewController: UIViewController {
             $0.center.equalToSuperview()
             
         }
-        
     }
     
     @objc
