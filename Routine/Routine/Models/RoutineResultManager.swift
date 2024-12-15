@@ -56,7 +56,7 @@ class RoutineResultManager {
 
 //한 날짜를 기준으로 여러 루틴ID의 결과들
 struct RoutineResultByDate {
-    let calender: Date
+    let calendar: Date
     var routineResults: [RoutineResult] = []
     //delete
 //    + createRoutineResults(날짜ID) -> default: RoutineResult(id: 루틴ID, isCompleted: false)

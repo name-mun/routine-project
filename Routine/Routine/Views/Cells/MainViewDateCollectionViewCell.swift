@@ -82,12 +82,3 @@ extension MainViewDateCollectionViewCell {
         dateButton.layer.cornerRadius = width / 2
     }
 }
-//
-//struct SuggesionData {
-//  var sectionTitle: String
-//  var subTitle: String
-//
-//  var data: [RoutineData]
-//}
-//
-//let morningRoutine = SuggesionData(sectionTitle: <#T##String#>, subTitle: <#T##String#>, data: <#T##[RoutineData]#>)

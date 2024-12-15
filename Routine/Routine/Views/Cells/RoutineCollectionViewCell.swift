@@ -6,21 +6,21 @@
 //
 
 import UIKit
+
 import SnapKit
 
-//MARK: - RoutineBoardCollectionViewCell
+//MARK: - RoutineCollectionViewCell
 
-class RoutineBoardCollectionViewCell: UICollectionViewCell {
+class RoutineCollectionViewCell: UICollectionViewCell {
     
-    static let cellID: String = "RoutineBoardCollectionViewCell"
-    
+    static let id: String = "RoutineBoardCollectionViewCell"
     static let borderWidth: CGFloat = 1
-    static let cornerRadius: CGFloat = 20
+    static let cornerRadius: CGFloat = 10
     
-    //루틴 데이터
+    // 루틴 데이터
     private var routine: RoutineData?
     
-    //전체 스택 뷰
+    // 전체 스택 뷰
     private var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.backgroundColor = .clear
@@ -29,7 +29,7 @@ class RoutineBoardCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-    //루틴 제목 라벨 뷰
+    // 루틴 제목 라벨 뷰
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.backgroundColor = .clear
@@ -40,148 +40,164 @@ class RoutineBoardCollectionViewCell: UICollectionViewCell {
         return titleLabel
     }()
     
-    //스티커 이미지 뷰
-    private let stickerView: UIImageView = {
+    // 스티커 이미지 뷰
+    private let stickerImageView: UIImageView = {
         let imageView = UIImageView()
+        
         imageView.contentMode = .bottom
         imageView.backgroundColor = .clear
         imageView.contentMode = .scaleAspectFill
+        
         return imageView
     }()
     
-    //중단 마크 이미지 뷰
+    // 중단 마크 이미지 뷰
     private let stopMarkImageView: UIImageView = {
         let imageView = UIImageView()
+        
         imageView.backgroundColor = .clear
         imageView.image = UIImage(systemName: "minus.circle")
         imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
+        
         return imageView
     }()
-    
-    ///
-    func configureData(_ routine: RoutineData) {
-        self.routine = routine
-        updateData()
-    }
-    
-    func configurePosition(indexPath: IndexPath, dataCount: Int) {
-        let position = Position(dataCount: dataCount, index: indexPath.item)
-        self.layer.maskedCorners = position.maskedCorner()
-        return
-    }
-    
-    //
-    func setIndex(dataCount: Int, index: Int) {
-        let position = Position(dataCount: dataCount, index: index)
-        self.layer.maskedCorners = position.maskedCorner()
-    }
+
     
     override func prepareForReuse() {
         resetData()
-        updateData()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpUI()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 }
 
 
-//MARK: - Set Up UI
-extension RoutineBoardCollectionViewCell {
+//MARK: - 외부 사용 메서드
+
+extension RoutineCollectionViewCell {
     
-    private func setUpUI() {
+    /// 셀 데이터 적용
+    func configureData(_ routine: RoutineData) {
+        self.routine = routine
+        updateData()
+    }
+    
+    /// 셀 포지션 적용
+    func configurePosition(index: Int, countOfData: Int) {
+        let position = Position(index: index, countOfData: countOfData)
+        layer.maskedCorners = position.maskedCorner()
+    }
+    
+}
+
+//MARK: - 레이아웃 설정
+
+extension RoutineCollectionViewCell {
+
+    // UI 설정
+    private func configureUI() {
+
+        [
+            stackView,
+            stopMarkImageView
+        ].forEach { addSubview($0) }
+
+        [
+            titleLabel,
+            stickerImageView
+        ].forEach { stackView.addArrangedSubview($0) }
         
-        [stackView, stopMarkImageView].forEach {
-            addSubview($0)
+        // 중단 마크 레이아웃 설정
+        stopMarkImageView.snp.makeConstraints { imageView in
+            imageView.trailing.top.equalToSuperview().inset(8)
+            imageView.size.equalTo(15)
         }
         
-        [titleLabel, stickerView].forEach {
-            stackView.addArrangedSubview($0)
-        }
-        
+        // 전체 스택 뷰 레이아웃 설정
         stackView.snp.makeConstraints { stackView in
-            stackView.top.bottom.leading.trailing.equalToSuperview()
+            stackView.center.size.equalToSuperview()
         }
         
+        // 루틴 제목 라벨 레이아웃 설정
         titleLabel.snp.makeConstraints { titleLabel in
             titleLabel.leading.trailing.equalToSuperview().inset(20)
             titleLabel.height.equalToSuperview().multipliedBy(0.7)
             titleLabel.centerX.equalToSuperview()
         }
-        
-        stickerView.snp.makeConstraints { imageView in
+
+        // 스티커 이미지 뷰 레이아웃 설정
+        stickerImageView.snp.makeConstraints { imageView in
             imageView.height.equalToSuperview().multipliedBy(0.3)
             imageView.centerX.equalToSuperview()
         }
-        
-        stopMarkImageView.snp.makeConstraints { imageView in
-            imageView.trailing.top.equalToSuperview().inset(8)
-            imageView.size.height.width.equalTo(15)
-        }
-    
-        self.clipsToBounds = true
-        self.layer.cornerRadius = Self.cornerRadius
-        
-        self.layer.borderWidth = Self.borderWidth
-        self.layer.borderColor = CGColor.init(red: 0, green: 0, blue: 0, alpha: 1)
+
+        clipsToBounds = true
+        layer.cornerRadius = Self.cornerRadius
+        layer.borderWidth = Self.borderWidth
+        layer.borderColor = UIColor.black.cgColor
     }
+    
+    
 }
 
-//MARK: - prepare for reuse
+//MARK: - 셀 재사용 시 사용 메서드
 
-extension RoutineBoardCollectionViewCell {
+extension RoutineCollectionViewCell {
+
+    // 셀 데이터 초기화
     private func resetData() {
-        self.stickerView.image = nil
-        self.titleLabel.text = nil
-        self.stopMarkImageView.isHidden = true
+        routine = nil
+        backgroundColor = .clear
+        stickerImageView.image = nil
+        titleLabel.text = nil
+        stopMarkImageView.isHidden = true
     }
+
 }
 
 
-//MARK: - Update Data
-extension RoutineBoardCollectionViewCell {
-    
-    //뷰에 루틴 데이터 적용
+//MARK: - 뷰 업데이트 메서드
+
+extension RoutineCollectionViewCell {
+
+    // 뷰에 루틴 데이터 적용
     private func updateData() {
         guard let routine = routine else { return }
-        
+
         updateBackgroundColor(routine.color)
         updateTitleLabel(routine.title)
         updateStickerImageView(routine.sticker)
         updateStopMarkView(routine.stopDate == nil)
     }
-    
+
+    // 보드 컬러 업데이트
     private func updateBackgroundColor(_ color: BoardColor) {
-        self.backgroundColor = color.get()
+        self.backgroundColor = color.uiColor()
     }
-    
+
+    // 루틴 제목 업데이트
     private func updateTitleLabel(_ title: String) {
         self.titleLabel.text = title
     }
-    
+
+    // 루틴 스티커 이미지 업데이트
     private func updateStickerImageView(_ assetName: AssetName) {
-        guard let stickerImage = UIImage(systemName: assetName)?.withRenderingMode(.alwaysOriginal) else {
-            return
-        }
-        self.stickerView.image = stickerImage
+        guard let stickerImage = UIImage(systemName: assetName)?
+            .withRenderingMode(.alwaysOriginal) else { return }
+        self.stickerImageView.image = stickerImage
     }
-    
+
+    // 루틴 중단마크 업데이트
     private func updateStopMarkView(_ stop: Bool) {
         stopMarkImageView.isHidden = stop
     }
-    
+
 }
-
-
-//MARK: - Preview
-#Preview("MainRoutineBoardViewController") {
-    MainRoutineViewController()
-}
-

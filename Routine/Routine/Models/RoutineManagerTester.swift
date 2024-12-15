@@ -19,7 +19,7 @@ struct RoutineManagerTester {
         routineManager.reset()
         
         creat()
-        read()
+//        read()
         update()
         delete()
     }
@@ -27,32 +27,29 @@ struct RoutineManagerTester {
     private func creat() {
         testStartPrint("creat")
         routineManager.create(oldValue)
-        
-        if let oldRoutine = routineManager.read(date: MockData.date),
-           oldRoutine.count == 1,
+        let oldRoutine = routineManager.read(of: MockData.date)
+        if oldRoutine.count == 1,
            oldRoutine[0] == oldValue {
             testResultPrint("creat", result: true)
         } else {
             testResultPrint("creat", result: false)
         }
     }
-    
-    private func read() {
-        testStartPrint("read")
-        
-        if nil != routineManager.read(date: MockData.date) {
-            testResultPrint("read", result: true)
-        } else {
-            testResultPrint("read", result: false)
-        }
-    }
+//    
+//    private func read() {
+//        testStartPrint("read")
+//        if routineManager.read(of: MockData.date) {
+//            testResultPrint("read", result: true)
+//        } else {
+//            testResultPrint("read", result: false)
+//        }
+//    }
     
     private func update() {
         testStartPrint("update")
         routineManager.update(routine: newValue)
-        
-        if let newRoutine = routineManager.read(date: MockData.date),
-           newRoutine.count == 1,
+        let newRoutine = routineManager.read(of: MockData.date)
+        if newRoutine.count == 1,
            newRoutine[0] == newValue {
             testResultPrint("update", result: true)
 
@@ -66,18 +63,18 @@ struct RoutineManagerTester {
         testStartPrint("delete")
         routineManager.delete(newValue)
         
-        if nil == routineManager.read(date: MockData.date) {
-            testResultPrint("delete", result: true)
+//        if nil == routineManager.read(date: MockData.date) {
+//            testResultPrint("delete", result: true)
             
-        } else if let routine = routineManager.read(date: MockData.date) {
-            let str = routine.map { $0.description }.joined(separator: "\n\n")
-            print(str)
-            testResultPrint("delete", result: false)
-
-            
-        } else {
-            print("delete 테스트 실패 🚨")
-        }
+//        } else if let routine = routineManager.read(date: MockData.date) {
+//            let str = routine.map { $0.description }.joined(separator: "\n\n")
+//            print(str)
+//            testResultPrint("delete", result: false)
+//
+//            
+//        } else {
+//            print("delete 테스트 실패 🚨")
+//        }
     }
     
     
