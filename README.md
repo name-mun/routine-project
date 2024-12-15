@@ -60,7 +60,7 @@ cd routine-project
 3. Xcode에서 `Routine.xcodeproj` 파일을 엽니다.
 
 4. Xcode에서 빌드 후 실행합니다.
-- 실행 대상에서 **iPhone Simulator** 선택
+- 실행 대상에서 **iPhone Simulator** 선택
 - **Cmd + R**로 실행
 <br><br>
 
