@@ -78,7 +78,7 @@ struct RoutineData: JSONCodable, CustomStringConvertible {
 }
 
 
-//MARK: - RoutineData 검증 메서드
+// MARK: - RoutineData 검증 메서드
 
 extension RoutineData: Equatable {
     

@@ -3,16 +3,6 @@ import Foundation
 
 struct MockData {
     
-    static let routineDatas: [(RoutineData, RoutineResult)] = {
-        var datas:[(RoutineData, RoutineResult)]  = []
-            
-        (0...10).forEach { _ in
-            datas.append((RoutineData.mock, RoutineResult(id: UUID(), isCompleted: false)))
-        }
-        
-        return datas
-    }()
-    
     static let uuid = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
     static let date = Date(timeIntervalSince1970: TimeInterval(0))
     
@@ -41,4 +31,12 @@ struct MockData {
                                             repeatation: .default,
                                             alarm: nil)
     
+    static let falseRoutineResult = RoutineResult(dateID: date,
+                                                  routineID: uuid,
+                                                  isCompleted: false)
+    
+    static let trueRoutineResult = RoutineResult(dateID: date,
+                                                 routineID: uuid,
+                                                 isCompleted: true)
+
 }

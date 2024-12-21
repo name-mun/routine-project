@@ -1,6 +1,6 @@
 import UIKit
 
-//MARK: - SnakeFlowLayout
+// MARK: - SnakeFlowLayout
 
 class SnakeFlowLayout: UICollectionViewFlowLayout {
   

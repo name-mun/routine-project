@@ -14,7 +14,7 @@ import SnapKit
     
 }
 
-//MARK: - MainRoutineViewController
+// MARK: - MainRoutineViewController
 
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
@@ -82,7 +82,7 @@ class MainRoutineViewController: UIViewController {
     
 }
 
-//MARK: - 기본 설정 메서드
+// MARK: - 기본 설정 메서드
 
 extension MainRoutineViewController {
     
@@ -120,7 +120,7 @@ extension MainRoutineViewController {
     
     // 루틴 데이터 업데이트 및 컬렉션 뷰 새로고침
     private func updateRoutineDatas() {
-        let datas = routineManager.read(of: date)
+        let datas = routineManager.read(date)
         
         self.routineDatas = datas
         self.routineCollectionView.reloadData()
@@ -129,7 +129,7 @@ extension MainRoutineViewController {
 }
 
 
-//MARK: - 버튼 액션
+// MARK: - 버튼 액션
 extension MainRoutineViewController {
         
     // 캘린더 모달 버튼 액션
@@ -168,7 +168,7 @@ extension MainRoutineViewController {
 }
 
 
-//MARK: - 루틴 컬렉션 뷰 메서드
+// MARK: - 루틴 컬렉션 뷰 메서드
 
 extension MainRoutineViewController {
     
@@ -219,7 +219,7 @@ extension MainRoutineViewController {
 }
 
 
-//MARK: - MainRoutineViewController - DataSource
+// MARK: - MainRoutineViewController - DataSource
 
 extension MainRoutineViewController: UICollectionViewDataSource {
     

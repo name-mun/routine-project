@@ -24,16 +24,15 @@ class RoutineManager {
     
     private let container: NSPersistentContainer
     
-    private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className,
-                                                         in: container.viewContext)
+    private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className, in: container.viewContext)
     
 }
 
-//MARK: - CRUD 메서드 ( + reset )
+// MARK: - CRUD 메서드 ( + reset )
 
 extension RoutineManager {
     
-    /// RoutineData를 입력받아 인코딩 후 CoreData에 저장
+    /// RoutineData를 인코딩 후 CoreData에 저장
     func create(_ routineData: RoutineData) {
         saveRoutineData(routineData)
         
@@ -45,7 +44,7 @@ extension RoutineManager {
     }
     
     /// 입력 날짜에 해당하는 루틴 데이터 배열 반환
-    func read(of date: Date) -> [RoutineData] {
+    func read(_ date: Date) -> [RoutineData] {
         var routineDatas: [RoutineData] = []
         
         do {
@@ -64,8 +63,8 @@ extension RoutineManager {
         return routineDatas
     }
     
-    /// 루틴ID, 날짜ID 를 통해 식별 후 데이터 업데이트
-    func update(routine: RoutineData) {
+    /// RoutineData를 통해 식별 후 데이터 업데이트
+    func update(_ routine: RoutineData) {
         do {
             let routineDataModels = try fetchRoutineDataModel()
             
@@ -82,7 +81,7 @@ extension RoutineManager {
         }
     }
 
-    /// 루틴ID, 날짜ID 를 통해 식별 후 삭제
+    /// RoutineData를 통해 식별 후 삭제
     func delete(_ routine: RoutineData) {
         
         do {
@@ -116,7 +115,7 @@ extension RoutineManager {
 }
 
 
-//MARK: 내부 사용 메서드
+// MARK: 내부 사용 메서드
 
 extension RoutineManager {
     
