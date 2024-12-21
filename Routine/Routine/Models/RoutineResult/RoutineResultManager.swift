@@ -34,6 +34,16 @@ extension RoutineResultManager {
     
     /// RoutineResult 를 생성 및 저장
     func create(_ routineResult: RoutineResult) {
+        do
+        {
+            let routineResultDatas = try fetchRoutineResultCoreData()
+            for routineResultData in routineResultDatas {
+                guard !routineResultData.isSame(routineResult) else { return }
+            }
+            
+        } catch {
+            
+        }
         guard let entity,
               let routineResultCoreData = NSManagedObject(entity: entity,
                                                           insertInto: container.viewContext)

@@ -8,7 +8,16 @@
 import Foundation
 
 // 루틴 결과
-struct RoutineResult {
+struct RoutineResult: CustomStringConvertible {
+    var description: String {
+        """
+        [RoutineResult]
+        dateID: \(dateID)
+        routineID: \(routineID)
+        isCompleted: \(isCompleted)
+        """
+    }
+    
     // 날짜ID 식별자
     let dateID: Date
     // 루틴ID 식별자

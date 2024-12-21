@@ -78,6 +78,8 @@ class MainRoutineViewController: UIViewController {
         setUpRoutineCollectionView()
                 
         updateRoutineDatas()
+
+        RoutineResultManagerTester().wholeTest()
     }
     
 }
