@@ -120,7 +120,7 @@ extension MainRoutineViewController {
     
     // 루틴 데이터 업데이트 및 컬렉션 뷰 새로고침
     private func updateRoutineDatas() {
-        let datas = routineManager.read(of: date)
+        let datas = routineManager.read(date)
         
         self.routineDatas = datas
         self.routineCollectionView.reloadData()
