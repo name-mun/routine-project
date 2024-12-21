@@ -24,8 +24,7 @@ class RoutineManager {
     
     private let container: NSPersistentContainer
     
-    private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className,
-                                                         in: container.viewContext)
+    private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineDataModel.className, in: container.viewContext)
     
 }
 
@@ -45,7 +44,7 @@ extension RoutineManager {
     }
     
     /// 입력 날짜에 해당하는 루틴 데이터 배열 반환
-    func read(of date: Date) -> [RoutineData] {
+    func read(_ date: Date) -> [RoutineData] {
         var routineDatas: [RoutineData] = []
         
         do {
