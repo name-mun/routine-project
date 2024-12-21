@@ -9,19 +9,6 @@ import UIKit
 
 import CoreData
 
-/*
-루틴 결과 매니저
- 
- 새로운 루틴결과를 생성, 수정, 삭제
- CRUD
- + createRoutineResults(날짜ID) -> default: RoutineResult(id: 루틴ID, isCompleted: false)
- + readRoutineResults(날짜ID) -> RountineResultByDate
- + updateRoutineResults(날짜ID, 루틴ID) toggle -> [RoutineResult]
- + deleteRountineResult(날짜ID, 루틴ID)
-
- */
-
-
 ///RoutineResult를 관리하는 싱글톤 객체
 ///
 ///CRUD 메서드 지원
@@ -39,7 +26,13 @@ class RoutineResultManager {
     
     private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineResultCoreData.className, in: container.viewContext)
     
-    //
+}
+
+// MARK: - CRUD 메서드 ( + reset )
+
+extension RoutineResultManager {
+    
+    /// RoutineResult 를 생성 및 저장
     func create(_ routineResult: RoutineResult) {
         guard let entity,
               let routineResultCoreData = NSManagedObject(entity: entity,
@@ -54,8 +47,8 @@ class RoutineResultManager {
         }
     }
     
-    //
-    func read(_ dateID: Date) -> [RoutineResult] {
+    // 날짜에 해당하는 RoutineResult 배열을 반환
+    func read(_ date: Date) -> [RoutineResult] {
         var routineResults: [RoutineResult] = []
         
         do {
@@ -63,17 +56,17 @@ class RoutineResultManager {
             
             routineResultCoreDatas.forEach { routineResultCoreData in
                 if let routineResult = routineResultCoreData.convertTo(),
-                   routineResult.isCorrect(dateID) {
+                   routineResult.isCorrect(date) {
                     routineResults.append(routineResult)
                 }
             }
         } catch let error {
             print("read: \(error)")
         }
-        return []
+        return routineResults
     }
     
-    //
+    /// routineResults 를 통해 업데이트
     func update(_ routineResult: RoutineResult) {
         do {
             let routineResultCoreDatas = try fetchRoutineResultCoreData()
@@ -89,7 +82,7 @@ class RoutineResultManager {
         }
     }
     
-    //
+    /// routineResults 를 통해 데이터 삭제
     func delete(_ routineResult: RoutineResult) {
         do {
             let routineResultCoreDatas = try fetchRoutineResultCoreData()
@@ -104,6 +97,7 @@ class RoutineResultManager {
         }
     }
     
+    /// 전체 데이터 삭제
     func reset() {
         do {
             let routineResultCoreDatas = try fetchRoutineResultCoreData()
@@ -116,34 +110,24 @@ class RoutineResultManager {
         }
     }
     
+}
+
+// MARK: - 내부 사용 메서드
+
+extension RoutineResultManager {
+    
+    // CoreData 에서 데이터 로드
     private func fetchRoutineResultCoreData() throws -> [RoutineResultCoreData] {
         return try container.viewContext.fetch(RoutineResultCoreData.fetchRequest())
     }
     
+    // 데이터 저장
     private func save() throws {
         try container.viewContext.save()
     }
     
+    // 데이터 삭제
     private func delete(_ routineResultCoreData: RoutineResultCoreData) {
         container.viewContext.delete(routineResultCoreData)
     }
 }
-
-/*
- 루틴 통계화면
- 
- [RoutineResultByDate] 한달치
- -> [Routine: [date]] ->
-
- 1. RoutineResultByRoutine와 RoutineResultByDate의 데이터 원본이 같기때문에 두 개의 데이터 형식이 불필요하다.👍
-*/
-
-//
-////한 날짜를 기준으로 여러 루틴ID의 결과들
-//struct RoutineResultByDate {
-//    let calendar: Date
-//    var routineResults: [RoutineResult] = []
-//    //delete
-////    + createRoutineResults(날짜ID) -> default: RoutineResult(id: 루틴ID, isCompleted: false)
-//}
-//

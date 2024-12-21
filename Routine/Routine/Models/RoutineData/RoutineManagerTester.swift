@@ -7,7 +7,7 @@
 
 import Foundation
 
-//MARK: - Test Method
+// MARK: - Test Method
 struct RoutineManagerTester {
     
     private let routineManager = RoutineManager.shared
@@ -47,7 +47,7 @@ struct RoutineManagerTester {
     
     private func update() {
         testStartPrint("update")
-        routineManager.update(routine: newValue)
+        routineManager.update(newValue)
         let newRoutine = routineManager.read(MockData.date)
         if newRoutine.count == 1,
            newRoutine[0] == newValue {

@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-//MARK: - RoutineCollectionViewCell
+// MARK: - RoutineCollectionViewCell
 
 class RoutineCollectionViewCell: UICollectionViewCell {
     
@@ -80,7 +80,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
 }
 
 
-//MARK: - 외부 사용 메서드
+// MARK: - 외부 사용 메서드
 
 extension RoutineCollectionViewCell {
     
@@ -98,7 +98,7 @@ extension RoutineCollectionViewCell {
     
 }
 
-//MARK: - 레이아웃 설정
+// MARK: - 레이아웃 설정
 
 extension RoutineCollectionViewCell {
 
@@ -148,7 +148,7 @@ extension RoutineCollectionViewCell {
     
 }
 
-//MARK: - 셀 재사용 시 사용 메서드
+// MARK: - 셀 재사용 시 사용 메서드
 
 extension RoutineCollectionViewCell {
 
@@ -164,7 +164,7 @@ extension RoutineCollectionViewCell {
 }
 
 
-//MARK: - 뷰 업데이트 메서드
+// MARK: - 뷰 업데이트 메서드
 
 extension RoutineCollectionViewCell {
 

@@ -45,8 +45,9 @@ extension RoutineResult: Equatable {
         return true
     }
     
+    // 날짜를 통한 검증
     func isCorrect(_ dateID: Date) -> Bool {
-        
+        self.dateID == dateID
     }
     
 }

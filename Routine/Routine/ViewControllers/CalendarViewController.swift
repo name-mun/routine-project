@@ -40,7 +40,7 @@ class CalendarViewController: UIViewController {
     
 }
 
-//MARK: - UI 설정
+// MARK: - UI 설정
 
 extension CalendarViewController {
 
@@ -61,7 +61,7 @@ extension CalendarViewController {
 
 }
 
-//MARK: - 외부 사용 메서드
+// MARK: - 외부 사용 메서드
 
 extension CalendarViewController {
     

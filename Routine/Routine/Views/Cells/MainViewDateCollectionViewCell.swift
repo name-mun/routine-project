@@ -8,19 +8,7 @@
 import UIKit
 import SnapKit
 
-//Data 저장형식 선정
-/*
- MARK: - Data 저장형식 선정
- 
- MARK: - 1.User Defaults
- 
- MARK: - 2.Core Data
- 
- MARK: - 3.Key Chains
- 
- */
-
-//MARK: - MainDateCollectionViewCell
+// MARK: - MainDateCollectionViewCell
 
 class MainViewDateCollectionViewCell: UICollectionViewCell {
     
@@ -58,7 +46,7 @@ class MainViewDateCollectionViewCell: UICollectionViewCell {
     }
 }
 
-//MARK: - Set Up UI
+// MARK: - Set Up UI
 
 extension MainViewDateCollectionViewCell {
     
