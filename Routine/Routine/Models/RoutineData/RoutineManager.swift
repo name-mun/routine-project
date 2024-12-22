@@ -9,7 +9,7 @@ import UIKit
 
 import CoreData
 
-///RoutineData를 관리하는 싱글톤 객체
+///Routine을 관리하는 싱글톤 객체
 ///
 ///CRUD 메서드 지원
 ///
@@ -33,7 +33,7 @@ class RoutineManager {
 extension RoutineManager {
     
     /// RoutineData를 인코딩 후 CoreData에 저장
-    func create(_ routineData: RoutineData) {
+    func create(_ routineData: Routine) {
         saveRoutineData(routineData)
         
         do {
@@ -44,8 +44,8 @@ extension RoutineManager {
     }
     
     /// 입력 날짜에 해당하는 루틴 데이터 배열 반환
-    func read(_ date: Date) -> [RoutineData] {
-        var routineDatas: [RoutineData] = []
+    func read(_ date: Date) -> [Routine] {
+        var routineDatas: [Routine] = []
         
         do {
             let routineDataModels = try fetchRoutineDataModel()
@@ -64,7 +64,7 @@ extension RoutineManager {
     }
     
     /// RoutineData를 통해 식별 후 데이터 업데이트
-    func update(_ routine: RoutineData) {
+    func update(_ routine: Routine) {
         do {
             let routineDataModels = try fetchRoutineDataModel()
             
@@ -82,7 +82,7 @@ extension RoutineManager {
     }
 
     /// RoutineData를 통해 식별 후 삭제
-    func delete(_ routine: RoutineData) {
+    func delete(_ routine: Routine) {
         
         do {
             let routineDataModels = try fetchRoutineDataModel()
@@ -120,7 +120,7 @@ extension RoutineManager {
 extension RoutineManager {
     
     // 루틴 데이터 모델 저장
-    private func saveRoutineData(_ routineData: RoutineData){
+    private func saveRoutineData(_ routineData: Routine){
         guard let entity,
               let routineDataModel = NSManagedObject(entity: entity,
                                                      insertInto: container.viewContext)

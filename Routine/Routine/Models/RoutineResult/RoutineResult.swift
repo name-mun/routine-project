@@ -11,7 +11,7 @@ import Foundation
 struct RoutineResult: CustomStringConvertible {
     
     // 날짜ID 식별자
-    let dateID: Date
+    let dateID: DateID
     // 루틴ID 식별자
     let routineID: RoutineID
 
@@ -36,7 +36,7 @@ struct RoutineResult: CustomStringConvertible {
          routineID: RoutineID,
          isCompleted: Bool = false) {
         self.routineID = routineID
-        self.dateID = dateID
+        self.dateID = DateIDFormatter.dateID(from: dateID)
         self.isCompleted = isCompleted
     }
     
@@ -49,14 +49,15 @@ extension RoutineResult: Equatable {
     /// 동일한 ID 인지 검증
     static func == (_ lhs: RoutineResult, _ rhs: RoutineResult) -> Bool {
         guard lhs.routineID == rhs.routineID,
-              lhs.dateID.yyyyMMdd() == rhs.dateID.yyyyMMdd() else { return false }
+              lhs.dateID == rhs.dateID else { return false }
         
         return true
     }
     
     // 날짜를 통한 검증
     func isCorrect(_ dateID: Date) -> Bool {
-        self.dateID.yyyyMMdd() == dateID.yyyyMMdd()
+        let dateID = DateIDFormatter.dateID(from: dateID)
+        return self.dateID == dateID
     }
     
 }

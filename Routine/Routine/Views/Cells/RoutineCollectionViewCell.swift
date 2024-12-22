@@ -19,7 +19,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
     
     // 루틴 데이터
     // 데이터가 변할 경우 프로퍼티 옵저버를 통해 뷰를 업데이트한다.
-    private var wholeData: WholeData? {
+    private var wholeData: RoutineData? {
         didSet {
             updateData()
         }
@@ -114,7 +114,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
 extension RoutineCollectionViewCell {
         
     /// 데이터 적용
-    func configureData(_ wholeData: WholeData) {
+    func configureData(_ wholeData: RoutineData) {
         self.wholeData = wholeData
     }
     

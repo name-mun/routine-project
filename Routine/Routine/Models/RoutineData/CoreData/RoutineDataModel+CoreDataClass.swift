@@ -23,7 +23,7 @@ public class RoutineDataModel: NSManagedObject {
         setValue(data, forKey: RoutineDataModel.Key.routineJSONData)
     }
     
-    func setRoutineData(_ routineData: RoutineData) {
+    func setRoutineData(_ routineData: Routine) {
         let jsonData = routineData.json()
         setValue(jsonData, forKey: RoutineDataModel.Key.routineJSONData)
     }
@@ -32,9 +32,9 @@ public class RoutineDataModel: NSManagedObject {
         return value(forKey: RoutineDataModel.Key.routineJSONData) as? Data
     }
     
-    func convert() -> RoutineData? {
+    func convert() -> Routine? {
         guard let routineJSONData = self.json(),
-              let routineData = RoutineData(from: routineJSONData) else { return nil}
+              let routineData = Routine(from: routineJSONData) else { return nil}
         
         return routineData
     }

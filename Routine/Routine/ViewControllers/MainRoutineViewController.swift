@@ -14,16 +14,16 @@ import SnapKit
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
     
-    private let wholeDataManager = WholeDataManager.shared
+    private let routineDataManager = RoutineDataManager.shared
 
     // 프로퍼티 옵저버를 통해 데이터가 변하기 전 자동으로 코어데이터에 값을 저장시킨다.
     // TODO: 마지막으로 누른 셀의 경우 데이터가 제대로 저장되지 않는 오류 발생
     // willSet / didSet 모두 적용시키면 정상 작동하지만 원인을 파악하지 못함
-    private var wholeDatas: [WholeData] = [] {
+    private var routineDatas: [RoutineData] = [] {
         willSet {
-            saveWholeDatas()
+            saveRoutineDatas()
         } didSet {
-            saveWholeDatas()
+            saveRoutineDatas()
         }
     }
     
@@ -121,16 +121,16 @@ extension MainRoutineViewController {
     
     // 루틴 데이터 업데이트 및 컬렉션 뷰 새로고침
     private func updateRoutineDatas() {
-        saveWholeDatas()
+        saveRoutineDatas()
         
-        let datas = wholeDataManager.read(at: date)
-        self.wholeDatas = datas
+        let datas = routineDataManager.read(at: date)
+        self.routineDatas = datas
         self.routineCollectionView.reloadData()
     }
     
-    private func saveWholeDatas() {
-        wholeDatas.forEach { wholeData in
-            wholeDataManager.update(wholeData)
+    private func saveRoutineDatas() {
+        routineDatas.forEach { wholeData in
+            routineDataManager.update(wholeData)
         }
     }
     
@@ -201,12 +201,12 @@ extension MainRoutineViewController {
         }
         
         let index = indexPath.item
-        guard wholeDatas.count - 1 >= index else {
+        guard routineDatas.count - 1 >= index else {
             return RoutineCollectionViewCell()
         }
         
-        let wholeData = wholeDatas[index]
-        routineCollectionViewCell.configurePosition(index: indexPath.item, countOfData: wholeDatas.count)
+        let wholeData = routineDatas[index]
+        routineCollectionViewCell.configurePosition(index: indexPath.item, countOfData: routineDatas.count)
         routineCollectionViewCell.configureData(wholeData)
         
         return routineCollectionViewCell
@@ -237,7 +237,7 @@ extension MainRoutineViewController: UICollectionViewDataSource {
         
         switch collectionView {
         case self.routineCollectionView:
-            return wholeDatas.count
+            return routineDatas.count
             
         default:
             return 0
@@ -268,10 +268,10 @@ extension MainRoutineViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         guard let cell = collectionView.cellForItem(at: indexPath) as? RoutineCollectionViewCell else { return false }
         let index = indexPath.item
-        var result = wholeDatas[index].result
+        var result = routineDatas[index].result
         result.toggle()
-        self.wholeDatas[index].result = result
-        cell.configureData(wholeDatas[index])
+        self.routineDatas[index].result = result
+        cell.configureData(routineDatas[index])
         return false
     }
     
