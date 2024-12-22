@@ -9,14 +9,6 @@ import Foundation
 
 // 루틴 결과
 struct RoutineResult: CustomStringConvertible {
-    var description: String {
-        """
-        [RoutineResult]
-        dateID: \(dateID)
-        routineID: \(routineID)
-        isCompleted: \(isCompleted)
-        """
-    }
     
     // 날짜ID 식별자
     let dateID: Date
@@ -25,6 +17,15 @@ struct RoutineResult: CustomStringConvertible {
 
     // 완료 여부
     private(set) var isCompleted: Bool
+    
+    var description: String {
+        """
+        [RoutineResult]
+        dateID: \(dateID)
+        routineID: \(routineID)
+        isCompleted: \(isCompleted)
+        """
+    }
     
     /// 미완료/완료 토글
     mutating func toggle() -> Bool {

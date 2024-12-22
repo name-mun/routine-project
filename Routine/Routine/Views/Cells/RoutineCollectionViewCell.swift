@@ -18,7 +18,12 @@ class RoutineCollectionViewCell: UICollectionViewCell {
     static let cornerRadius: CGFloat = 10
     
     // 루틴 데이터
-    private var routine: RoutineData?
+    private var wholeData: WholeData? {
+        didSet {
+            updateData()
+        }
+    }
+    
     
     // 전체 스택 뷰
     private var stackView: UIStackView = {
@@ -62,6 +67,18 @@ class RoutineCollectionViewCell: UICollectionViewCell {
         
         return imageView
     }()
+    
+    //
+    private let checkImageView: UIImageView = {
+        let imageView = UIImageView()
+        
+        imageView.backgroundColor = .clear
+        imageView.image = UIImage(systemName: "checkmark.square")
+        imageView.tintColor = .red
+        imageView.isHidden = true
+       
+        return imageView
+    }()
 
     
     override func prepareForReuse() {
@@ -84,10 +101,8 @@ class RoutineCollectionViewCell: UICollectionViewCell {
 
 extension RoutineCollectionViewCell {
     
-    /// 셀 데이터 적용
-    func configureData(_ routine: RoutineData) {
-        self.routine = routine
-        updateData()
+    func configureData(_ wholeData: WholeData) {
+        self.wholeData = wholeData
     }
     
     /// 셀 포지션 적용
@@ -107,7 +122,8 @@ extension RoutineCollectionViewCell {
 
         [
             stackView,
-            stopMarkImageView
+            stopMarkImageView,
+            checkImageView
         ].forEach { addSubview($0) }
 
         [
@@ -138,6 +154,11 @@ extension RoutineCollectionViewCell {
             imageView.height.equalToSuperview().multipliedBy(0.3)
             imageView.centerX.equalToSuperview()
         }
+        
+        checkImageView.snp.makeConstraints { imageView in
+            imageView.center.equalToSuperview()
+            imageView.size.equalToSuperview().multipliedBy(0.5)
+        }
 
         clipsToBounds = true
         layer.cornerRadius = Self.cornerRadius
@@ -154,7 +175,7 @@ extension RoutineCollectionViewCell {
 
     // 셀 데이터 초기화
     private func resetData() {
-        routine = nil
+        wholeData = nil
         backgroundColor = .clear
         stickerImageView.image = nil
         titleLabel.text = nil
@@ -170,12 +191,15 @@ extension RoutineCollectionViewCell {
 
     // 뷰에 루틴 데이터 적용
     private func updateData() {
-        guard let routine = routine else { return }
-
+        guard let wholeData else { return }
+        let routine = wholeData.routine
+        let result = wholeData.result
+        
         updateBackgroundColor(routine.color)
         updateTitleLabel(routine.title)
         updateStickerImageView(routine.sticker)
         updateStopMarkView(routine.stopDate == nil)
+        updateResult(result.isCompleted)
     }
 
     // 보드 컬러 업데이트
@@ -198,6 +222,10 @@ extension RoutineCollectionViewCell {
     // 루틴 중단마크 업데이트
     private func updateStopMarkView(_ stop: Bool) {
         stopMarkImageView.isHidden = stop
+    }
+    
+    private func updateResult(_ isCompleted: Bool) {
+        checkImageView.isHidden = !isCompleted
     }
 
 }

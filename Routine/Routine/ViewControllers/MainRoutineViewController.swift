@@ -9,21 +9,19 @@ import UIKit
 
 import SnapKit
 
-#Preview {
-    MainRoutineViewController()
-    
-}
+//#Preview {
+//    MainRoutineViewController()
+//    
+//}
 
 // MARK: - MainRoutineViewController
 
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
         
-    // 루틴 데이터 매니저 객체
-    private let routineManager = RoutineManager.shared
     
-    // 루틴 데이터
-    private var routineDatas: [RoutineData] = []
+    private var wholeDatas: [WholeData] = []
+    private let wholeDataManager = WholeDataManager.shared
     
     // 뷰에 로드되는 루틴 날짜
     private var date: Date = Date.now
@@ -78,6 +76,7 @@ class MainRoutineViewController: UIViewController {
         setUpRoutineCollectionView()
                 
         updateRoutineDatas()
+        RoutineResultManagerTester().wholeTest()
     }
     
 }
@@ -120,9 +119,8 @@ extension MainRoutineViewController {
     
     // 루틴 데이터 업데이트 및 컬렉션 뷰 새로고침
     private func updateRoutineDatas() {
-        let datas = routineManager.read(date)
-        
-        self.routineDatas = datas
+        let datas = wholeDataManager.read(at: date)
+        self.wholeDatas = datas
         self.routineCollectionView.reloadData()
     }
     
@@ -191,14 +189,12 @@ extension MainRoutineViewController {
         }
         
         let index = indexPath.item
-        guard routineDatas.count-1 >= index else {
+        guard wholeDatas.count-1 >= index else {
             return RoutineCollectionViewCell()
         }
         
-        let routine = routineDatas[index]
-        routineCollectionViewCell.configureData(routine)
-        routineCollectionViewCell.configurePosition(index: index,
-                                                    countOfData: routineDatas.count)
+        let wholeData = wholeDatas[index]
+        routineCollectionViewCell.configureData(wholeData)
         
         return routineCollectionViewCell
     }
@@ -228,7 +224,7 @@ extension MainRoutineViewController: UICollectionViewDataSource {
         
         switch collectionView {
         case self.routineCollectionView:
-            return routineDatas.count
+            return wholeDatas.count
             
         default:
             return 0

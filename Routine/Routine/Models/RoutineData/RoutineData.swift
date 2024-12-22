@@ -16,6 +16,8 @@ struct RoutineData: JSONCodable, CustomStringConvertible {
                                   startDate: MockData.date,
                                   repeatation: .default)
     
+    private static let routineResultManager = RoutineResultManager.shared
+    
     //식별자 - RoutineID(타입별칭)
     let id: RoutineID
     
@@ -75,6 +77,13 @@ struct RoutineData: JSONCodable, CustomStringConvertible {
         self.alarm = alarm
     }
     
+    func result(at date: Date) -> RoutineResult {
+        guard let result = Self.routineResultManager.read(date, id) else {
+            return RoutineResult(dateID: date, routineID: id)
+        }
+        
+        return result
+    }
 }
 
 
