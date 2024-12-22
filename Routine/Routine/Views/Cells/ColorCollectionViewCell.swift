@@ -15,6 +15,8 @@ class ColorCollectionViewCell: UICollectionViewCell {
     var colorImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .yellow
+        imageView.contentMode = .center
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 17
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.layer.borderWidth = 1
@@ -45,15 +47,31 @@ class ColorCollectionViewCell: UICollectionViewCell {
 
 }
 
-// MARK: - 색상 설정
+// MARK: - 데이터 설정
 
 extension ColorCollectionViewCell {
+    // 색상 설정
     func setupColor(_ color: [Double]) {
         let rColor = color[0] / 256.0
         let gColor = color[1] / 256.0
         let bColor = color[2] / 256.0
         let colors = UIColor(red: rColor, green: gColor, blue: bColor, alpha: 1)
         colorImageView.backgroundColor = colors
+    }
+
+    // 선택된 색상 체크 표시
+    func setupCheck(_ isSelected: Bool) {
+        if isSelected {
+            let systemImage = UIImage(systemName: "checkmark")
+            let newSize = CGSize(width: 15, height: 15)
+            let renderer = UIGraphicsImageRenderer(size: newSize)
+            let resizedImage = renderer.image { _ in
+                systemImage?.draw(in: CGRect(origin: .zero, size: newSize)) // 이미지 사이즈 조정
+            }
+            colorImageView.image = resizedImage
+        } else {
+            colorImageView.image = .none
+        }
     }
 
 }

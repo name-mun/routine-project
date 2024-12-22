@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 
+// 색상 데이터
 let colorData = [
     [255.0, 255.0, 255.0],
     [244.0, 244.0, 245.0],
@@ -24,7 +25,16 @@ let colorData = [
     [244.0, 243.0, 255.0]
 ]
 
+// SelectColorViewControllerDelegate 프로토콜
+protocol SelectColorViewControllerDelegate: AnyObject {
+    func updateColor(_ viewController: SelectColorViewController, color: [Double], selectedIndex: Int)
+}
+
 class SelectColorViewController: UIViewController {
+
+    weak var delegate: SelectColorViewControllerDelegate?
+
+    private var selectedIneex = 0
 
     // 타이틀 Label
     private let titleLabel: UILabel = {
@@ -76,10 +86,24 @@ class SelectColorViewController: UIViewController {
 
 }
 
+// MARK: - 데이터 설정
+
+extension SelectColorViewController {
+
+    func setupIndex(_ index: Int) {
+        selectedIneex = index
+    }
+}
+
 // MARK: - CollectionView Delegate 설정
 
 extension SelectColorViewController: UICollectionViewDelegate {
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedIneex = indexPath.item
+        self.delegate?.updateColor(self, color: colorData[indexPath.item], selectedIndex: selectedIneex)
+        self.dismiss(animated: true)
+    }
 }
 
 // MARK: - CollectionView DataSource 설정
@@ -93,7 +117,15 @@ extension SelectColorViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ColorCollectionViewCell else {
             return UICollectionViewCell() }
         cell.setupColor(colorData[indexPath.item])
+
+        if indexPath.item == selectedIneex {
+            cell.setupCheck(true)
+        } else {
+            cell.setupCheck(false)
+        }
+
         return cell
     }
 
 }
+
