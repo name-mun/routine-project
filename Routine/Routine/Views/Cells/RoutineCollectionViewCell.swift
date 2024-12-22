@@ -18,6 +18,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
     static let cornerRadius: CGFloat = 10
     
     // 루틴 데이터
+    // 데이터가 변할 경우 프로퍼티 옵저버를 통해 뷰를 업데이트한다.
     private var wholeData: WholeData? {
         didSet {
             updateData()

@@ -9,11 +9,6 @@ import UIKit
 
 import SnapKit
 
-//#Preview {
-//    MainRoutineViewController()
-//    
-//}
-
 // MARK: - MainRoutineViewController
 
 // 루틴 메인 화면 ViewController
@@ -21,6 +16,9 @@ class MainRoutineViewController: UIViewController {
     
     private let wholeDataManager = WholeDataManager.shared
 
+    // 프로퍼티 옵저버를 통해 데이터가 변하기 전 자동으로 코어데이터에 값을 저장시킨다.
+    // TODO: 마지막으로 누른 셀의 경우 데이터가 제대로 저장되지 않는 오류 발생
+    // willSet / didSet 모두 적용시키면 정상 작동하지만 원인을 파악하지 못함
     private var wholeDatas: [WholeData] = [] {
         willSet {
             saveWholeDatas()
@@ -78,14 +76,11 @@ class MainRoutineViewController: UIViewController {
         
         self.view.backgroundColor = .white
 
-        wholeDataManager.reset()
         configureUI()
         setUpRoutineCollectionView()
                 
         updateRoutineDatas()
     }
-
-//    view
     
 }
 
@@ -96,7 +91,6 @@ extension MainRoutineViewController {
     // 전체 레이아웃 설정
     private func configureUI() {
         
-        //addSubView
         [
             calendarModalButton,
             routineCollectionView,
@@ -212,6 +206,7 @@ extension MainRoutineViewController {
         }
         
         let wholeData = wholeDatas[index]
+        routineCollectionViewCell.configurePosition(index: indexPath.item, countOfData: wholeDatas.count)
         routineCollectionViewCell.configureData(wholeData)
         
         return routineCollectionViewCell
@@ -268,6 +263,8 @@ extension MainRoutineViewController: UICollectionViewDataSource {
 
 extension MainRoutineViewController: UICollectionViewDelegate {
     
+    // 셀이 선택되기 전 호출 메서드
+    // 해당 셀의 결과값을 전환시킨다
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         guard let cell = collectionView.cellForItem(at: indexPath) as? RoutineCollectionViewCell else { return false }
         let index = indexPath.item

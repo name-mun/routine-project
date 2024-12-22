@@ -7,12 +7,8 @@
 
 import Foundation
 
-/*
-(Date) -> 루틴 리스트 -> 결과 리스트
 
- 
- */
-
+// 전체 루틴 데이터 매니저 (루틴 데이터 / 루틴 결과)
 class WholeDataManager {
     
     static let shared = WholeDataManager()
