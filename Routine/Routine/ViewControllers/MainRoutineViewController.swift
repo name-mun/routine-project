@@ -201,7 +201,7 @@ extension MainRoutineViewController {
         }
         
         let index = indexPath.item
-        guard wholeDatas.count-1 >= index else {
+        guard wholeDatas.count - 1 >= index else {
             return RoutineCollectionViewCell()
         }
         

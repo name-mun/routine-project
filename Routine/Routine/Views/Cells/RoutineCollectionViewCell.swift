@@ -76,18 +76,16 @@ class RoutineCollectionViewCell: UICollectionViewCell {
         
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .clear
-//        imageView.image =
-        imageView.tintColor = .white
         imageView.isHidden = true
-       
-        let checkImage = UIImage(systemName: "checkmark.rectangle.portrait.fill")?.withTintColor(.green.withAlphaComponent(0.8))
         
-        let imageSize = CGSize(width: 50, height: 50)
+        let checkImage = UIImage(systemName: "checkmark.square.fill")?.withTintColor(.green.withAlphaComponent(0.8))
+        
+        let imageSize = CGSize(width: 30, height: 25)
         let renderer = UIGraphicsImageRenderer(size: imageSize)
         let resizedCheckImage = renderer.image { _ in
             checkImage?.draw(in: .init(origin: .zero, size: imageSize))
         }
-        
+                
         imageView.image = resizedCheckImage
         imageView.tintColor = .white
 
