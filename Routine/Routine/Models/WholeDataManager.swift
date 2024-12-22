@@ -44,6 +44,11 @@ class WholeDataManager {
         routineResultManager.delete(wholeData.result)
     }
     
+    func reset() {
+        routineManager.reset()
+        routineResultManager.reset()
+    }
+    
     private func wholeData(_ routine: RoutineData, _ date: Date) -> WholeData {
         let routine = routine
         let result = routine.result(at: date)

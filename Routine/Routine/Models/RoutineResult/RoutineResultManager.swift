@@ -82,11 +82,15 @@ extension RoutineResultManager {
         do {
             let routineResultCoreDatas = try fetchRoutineResultCoreData()
             
-            routineResultCoreDatas.forEach { routineResultCoreData in
+            for routineResultCoreData in routineResultCoreDatas {
                 if routineResultCoreData.isSame(routineResult) {
                     routineResultCoreData.set(routineResult)
+                    return
                 }
             }
+            
+            create(routineResult)
+            
             try container.viewContext.save()
         } catch let error {
             print("update: \(error)")
@@ -121,6 +125,15 @@ extension RoutineResultManager {
         }
     }
     
+    func readAll() {
+        do {
+            let routineResultCoreDatas = try fetchRoutineResultCoreData()
+            let string = routineResultCoreDatas.compactMap { $0.convertTo() }.map { String(describing: $0) }.joined(separator: "\n")
+            print(string)
+        } catch {
+            print("readAll fail")
+        }
+    }
 }
 
 // MARK: - 내부 사용 메서드

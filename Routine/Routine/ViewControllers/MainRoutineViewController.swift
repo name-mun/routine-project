@@ -18,10 +18,16 @@ import SnapKit
 
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
-        
     
-    private var wholeDatas: [WholeData] = []
     private let wholeDataManager = WholeDataManager.shared
+
+    private var wholeDatas: [WholeData] = [] {
+        willSet {
+            saveWholeDatas()
+        } didSet {
+            saveWholeDatas()
+        }
+    }
     
     // 뷰에 로드되는 루틴 날짜
     private var date: Date = Date.now
@@ -71,13 +77,15 @@ class MainRoutineViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        
+
+        wholeDataManager.reset()
         configureUI()
         setUpRoutineCollectionView()
                 
         updateRoutineDatas()
-        RoutineResultManagerTester().wholeTest()
     }
+
+//    view
     
 }
 
@@ -119,9 +127,17 @@ extension MainRoutineViewController {
     
     // 루틴 데이터 업데이트 및 컬렉션 뷰 새로고침
     private func updateRoutineDatas() {
+        saveWholeDatas()
+        
         let datas = wholeDataManager.read(at: date)
         self.wholeDatas = datas
         self.routineCollectionView.reloadData()
+    }
+    
+    private func saveWholeDatas() {
+        wholeDatas.forEach { wholeData in
+            wholeDataManager.update(wholeData)
+        }
     }
     
 }
@@ -153,6 +169,7 @@ extension MainRoutineViewController {
     // 루틴 추천 모달 버튼 액션
     @objc
     private func suggestionModalButtonTapped() {
+
         let routineSuggestionView = RoutineSuggestionViewController()
         
         routineSuggestionView.onDismiss = { [weak self] in
@@ -173,6 +190,7 @@ extension MainRoutineViewController {
     // 루틴 컬렉션 뷰 설정
     private func setUpRoutineCollectionView() {
         routineCollectionView.dataSource = self
+        routineCollectionView.delegate = self
         
         routineCollectionView.register(RoutineCollectionViewCell.self,
                                        forCellWithReuseIdentifier: RoutineCollectionViewCell.id)
@@ -246,3 +264,18 @@ extension MainRoutineViewController: UICollectionViewDataSource {
     
 }
 
+// MARK: - MainRoutineViewController - Delegate
+
+extension MainRoutineViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? RoutineCollectionViewCell else { return false }
+        let index = indexPath.item
+        var result = wholeDatas[index].result
+        result.toggle()
+        self.wholeDatas[index].result = result
+        cell.configureData(wholeDatas[index])
+        return false
+    }
+    
+}

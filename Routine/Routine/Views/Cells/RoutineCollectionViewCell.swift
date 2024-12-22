@@ -61,6 +61,7 @@ class RoutineCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         
         imageView.backgroundColor = .clear
+        
         imageView.image = UIImage(systemName: "minus.circle")
         imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
@@ -72,11 +73,23 @@ class RoutineCollectionViewCell: UICollectionViewCell {
     private let checkImageView: UIImageView = {
         let imageView = UIImageView()
         
+        imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .clear
-        imageView.image = UIImage(systemName: "checkmark.square")
-        imageView.tintColor = .red
+//        imageView.image =
+        imageView.tintColor = .white
         imageView.isHidden = true
        
+        let checkImage = UIImage(systemName: "checkmark.rectangle.portrait.fill")?.withTintColor(.green.withAlphaComponent(0.8))
+        
+        let imageSize = CGSize(width: 50, height: 50)
+        let renderer = UIGraphicsImageRenderer(size: imageSize)
+        let resizedCheckImage = renderer.image { _ in
+            checkImage?.draw(in: .init(origin: .zero, size: imageSize))
+        }
+        
+        imageView.image = resizedCheckImage
+        imageView.tintColor = .white
+
         return imageView
     }()
 
@@ -100,7 +113,8 @@ class RoutineCollectionViewCell: UICollectionViewCell {
 // MARK: - 외부 사용 메서드
 
 extension RoutineCollectionViewCell {
-    
+        
+    /// 데이터 적용
     func configureData(_ wholeData: WholeData) {
         self.wholeData = wholeData
     }

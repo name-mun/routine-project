@@ -117,7 +117,7 @@ extension RoutineData: Equatable {
 
 }
 
-private extension Date {
+extension Date {
     
     func yyyyMMdd() -> String {
         let year = Calendar.current.component(.year, from: self)
