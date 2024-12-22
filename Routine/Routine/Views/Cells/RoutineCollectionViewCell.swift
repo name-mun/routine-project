@@ -18,7 +18,13 @@ class RoutineCollectionViewCell: UICollectionViewCell {
     static let cornerRadius: CGFloat = 10
     
     // 루틴 데이터
-    private var routine: RoutineData?
+    // 데이터가 변할 경우 프로퍼티 옵저버를 통해 뷰를 업데이트한다.
+    private var wholeData: WholeData? {
+        didSet {
+            updateData()
+        }
+    }
+    
     
     // 전체 스택 뷰
     private var stackView: UIStackView = {
@@ -56,10 +62,33 @@ class RoutineCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         
         imageView.backgroundColor = .clear
+        
         imageView.image = UIImage(systemName: "minus.circle")
         imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
         
+        return imageView
+    }()
+    
+    //
+    private let checkImageView: UIImageView = {
+        let imageView = UIImageView()
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .clear
+        imageView.isHidden = true
+        
+        let checkImage = UIImage(systemName: "checkmark.square.fill")?.withTintColor(.green.withAlphaComponent(0.8))
+        
+        let imageSize = CGSize(width: 30, height: 25)
+        let renderer = UIGraphicsImageRenderer(size: imageSize)
+        let resizedCheckImage = renderer.image { _ in
+            checkImage?.draw(in: .init(origin: .zero, size: imageSize))
+        }
+                
+        imageView.image = resizedCheckImage
+        imageView.tintColor = .white
+
         return imageView
     }()
 
@@ -83,11 +112,10 @@ class RoutineCollectionViewCell: UICollectionViewCell {
 // MARK: - 외부 사용 메서드
 
 extension RoutineCollectionViewCell {
-    
-    /// 셀 데이터 적용
-    func configureData(_ routine: RoutineData) {
-        self.routine = routine
-        updateData()
+        
+    /// 데이터 적용
+    func configureData(_ wholeData: WholeData) {
+        self.wholeData = wholeData
     }
     
     /// 셀 포지션 적용
@@ -107,7 +135,8 @@ extension RoutineCollectionViewCell {
 
         [
             stackView,
-            stopMarkImageView
+            stopMarkImageView,
+            checkImageView
         ].forEach { addSubview($0) }
 
         [
@@ -138,6 +167,11 @@ extension RoutineCollectionViewCell {
             imageView.height.equalToSuperview().multipliedBy(0.3)
             imageView.centerX.equalToSuperview()
         }
+        
+        checkImageView.snp.makeConstraints { imageView in
+            imageView.center.equalToSuperview()
+            imageView.size.equalToSuperview().multipliedBy(0.5)
+        }
 
         clipsToBounds = true
         layer.cornerRadius = Self.cornerRadius
@@ -154,7 +188,7 @@ extension RoutineCollectionViewCell {
 
     // 셀 데이터 초기화
     private func resetData() {
-        routine = nil
+        wholeData = nil
         backgroundColor = .clear
         stickerImageView.image = nil
         titleLabel.text = nil
@@ -170,12 +204,15 @@ extension RoutineCollectionViewCell {
 
     // 뷰에 루틴 데이터 적용
     private func updateData() {
-        guard let routine = routine else { return }
-
+        guard let wholeData else { return }
+        let routine = wholeData.routine
+        let result = wholeData.result
+        
         updateBackgroundColor(routine.color)
         updateTitleLabel(routine.title)
         updateStickerImageView(routine.sticker)
         updateStopMarkView(routine.stopDate == nil)
+        updateResult(result.isCompleted)
     }
 
     // 보드 컬러 업데이트
@@ -198,6 +235,10 @@ extension RoutineCollectionViewCell {
     // 루틴 중단마크 업데이트
     private func updateStopMarkView(_ stop: Bool) {
         stopMarkImageView.isHidden = stop
+    }
+    
+    private func updateResult(_ isCompleted: Bool) {
+        checkImageView.isHidden = !isCompleted
     }
 
 }

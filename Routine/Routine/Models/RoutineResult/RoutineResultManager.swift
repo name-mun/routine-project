@@ -57,23 +57,24 @@ extension RoutineResultManager {
         }
     }
     
-    // 날짜에 해당하는 RoutineResult 배열을 반환
-    func read(_ date: Date) -> [RoutineResult] {
-        var routineResults: [RoutineResult] = []
-        
+    /// dateID / routineID 를 통해 RoutineResult? 반환
+    func read(_ dateID: Date, _ routineID: UUID) -> RoutineResult? {
         do {
             let routineResultCoreDatas = try fetchRoutineResultCoreData()
+            let testRoutineResult = RoutineResult(dateID: dateID, routineID: routineID)
             
-            routineResultCoreDatas.forEach { routineResultCoreData in
-                if let routineResult = routineResultCoreData.convertTo(),
-                   routineResult.isCorrect(date) {
-                    routineResults.append(routineResult)
+            for routineResultCoreData in routineResultCoreDatas {
+                if routineResultCoreData.isSame(testRoutineResult),
+                   let routineResult = routineResultCoreData.convertTo() {
+                    return routineResult
                 }
             }
+            
         } catch let error {
             print("read: \(error)")
         }
-        return routineResults
+        
+        return nil
     }
     
     /// routineResults 를 통해 업데이트
@@ -81,11 +82,15 @@ extension RoutineResultManager {
         do {
             let routineResultCoreDatas = try fetchRoutineResultCoreData()
             
-            routineResultCoreDatas.forEach { routineResultCoreData in
+            for routineResultCoreData in routineResultCoreDatas {
                 if routineResultCoreData.isSame(routineResult) {
                     routineResultCoreData.set(routineResult)
+                    return
                 }
             }
+            
+            create(routineResult)
+            
             try container.viewContext.save()
         } catch let error {
             print("update: \(error)")
@@ -120,6 +125,15 @@ extension RoutineResultManager {
         }
     }
     
+    func readAll() {
+        do {
+            let routineResultCoreDatas = try fetchRoutineResultCoreData()
+            let string = routineResultCoreDatas.compactMap { $0.convertTo() }.map { String(describing: $0) }.joined(separator: "\n")
+            print(string)
+        } catch {
+            print("readAll fail")
+        }
+    }
 }
 
 // MARK: - 내부 사용 메서드

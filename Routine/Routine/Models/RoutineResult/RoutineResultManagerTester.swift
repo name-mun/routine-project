@@ -19,10 +19,11 @@ struct RoutineResultManagerTester {
     private let falseResult = MockData.falseRoutineResult
     private let trueResult = MockData.trueRoutineResult
     private let date = MockData.date
+    private let id = MockData.uuid
     
     // 현재 테스트 데이터
-    private var currentResult: [RoutineResult] {
-        manager.read(date)
+    private var currentResult: RoutineResult? {
+        manager.read(date, id)
     }
     
     // 전체 데이터 테스트
@@ -38,21 +39,21 @@ struct RoutineResultManagerTester {
         manager.create(trueResult)
 
         currentResultPrint()
-        let createResult = currentResult.count == 1 && currentResult[0] == falseResult
+        let createResult = currentResult == falseResult
         testResultPrint("create", result: createResult)
         
         // update 테스트
         testStartPrint("update")
         manager.update(trueResult)
         currentResultPrint()
-        let updateResult = currentResult.count == 1 && currentResult[0] == trueResult
+        let updateResult = currentResult == trueResult
         testResultPrint("update", result: updateResult)
         
         // delete 테스트
         testStartPrint("delete")
         manager.delete(falseResult)
         currentResultPrint()
-        let deleteResult = currentResult.isEmpty
+        let deleteResult = currentResult == nil
         testResultPrint("delete", result: deleteResult)
         
         // 테스트 완료 후 데이터 초기화
@@ -61,12 +62,12 @@ struct RoutineResultManagerTester {
     
     // 현재의 테스트 데이터 출력
     private func currentResultPrint() {
-        guard !currentResult.isEmpty else {
+        guard currentResult == nil else {
             print("\n currentResult is empty \n")
             return
         }
         
-        let currentResultString = currentResult.map { String(describing: $0) }.joined(separator: "\n")
+        let currentResultString = String(describing: currentResult)
         print("\n\(currentResultString)\n")
     }
     

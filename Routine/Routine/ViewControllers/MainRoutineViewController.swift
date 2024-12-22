@@ -9,21 +9,23 @@ import UIKit
 
 import SnapKit
 
-#Preview {
-    MainRoutineViewController()
-    
-}
-
 // MARK: - MainRoutineViewController
 
 // 루틴 메인 화면 ViewController
 class MainRoutineViewController: UIViewController {
-        
-    // 루틴 데이터 매니저 객체
-    private let routineManager = RoutineManager.shared
     
-    // 루틴 데이터
-    private var routineDatas: [RoutineData] = []
+    private let wholeDataManager = WholeDataManager.shared
+
+    // 프로퍼티 옵저버를 통해 데이터가 변하기 전 자동으로 코어데이터에 값을 저장시킨다.
+    // TODO: 마지막으로 누른 셀의 경우 데이터가 제대로 저장되지 않는 오류 발생
+    // willSet / didSet 모두 적용시키면 정상 작동하지만 원인을 파악하지 못함
+    private var wholeDatas: [WholeData] = [] {
+        willSet {
+            saveWholeDatas()
+        } didSet {
+            saveWholeDatas()
+        }
+    }
     
     // 뷰에 로드되는 루틴 날짜
     private var date: Date = Date.now
@@ -73,7 +75,7 @@ class MainRoutineViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        
+
         configureUI()
         setUpRoutineCollectionView()
                 
@@ -89,7 +91,6 @@ extension MainRoutineViewController {
     // 전체 레이아웃 설정
     private func configureUI() {
         
-        //addSubView
         [
             calendarModalButton,
             routineCollectionView,
@@ -120,10 +121,17 @@ extension MainRoutineViewController {
     
     // 루틴 데이터 업데이트 및 컬렉션 뷰 새로고침
     private func updateRoutineDatas() {
-        let datas = routineManager.read(date)
+        saveWholeDatas()
         
-        self.routineDatas = datas
+        let datas = wholeDataManager.read(at: date)
+        self.wholeDatas = datas
         self.routineCollectionView.reloadData()
+    }
+    
+    private func saveWholeDatas() {
+        wholeDatas.forEach { wholeData in
+            wholeDataManager.update(wholeData)
+        }
     }
     
 }
@@ -155,6 +163,7 @@ extension MainRoutineViewController {
     // 루틴 추천 모달 버튼 액션
     @objc
     private func suggestionModalButtonTapped() {
+
         let routineSuggestionView = RoutineSuggestionViewController()
         
         routineSuggestionView.onDismiss = { [weak self] in
@@ -175,6 +184,7 @@ extension MainRoutineViewController {
     // 루틴 컬렉션 뷰 설정
     private func setUpRoutineCollectionView() {
         routineCollectionView.dataSource = self
+        routineCollectionView.delegate = self
         
         routineCollectionView.register(RoutineCollectionViewCell.self,
                                        forCellWithReuseIdentifier: RoutineCollectionViewCell.id)
@@ -191,14 +201,13 @@ extension MainRoutineViewController {
         }
         
         let index = indexPath.item
-        guard routineDatas.count-1 >= index else {
+        guard wholeDatas.count - 1 >= index else {
             return RoutineCollectionViewCell()
         }
         
-        let routine = routineDatas[index]
-        routineCollectionViewCell.configureData(routine)
-        routineCollectionViewCell.configurePosition(index: index,
-                                                    countOfData: routineDatas.count)
+        let wholeData = wholeDatas[index]
+        routineCollectionViewCell.configurePosition(index: indexPath.item, countOfData: wholeDatas.count)
+        routineCollectionViewCell.configureData(wholeData)
         
         return routineCollectionViewCell
     }
@@ -228,7 +237,7 @@ extension MainRoutineViewController: UICollectionViewDataSource {
         
         switch collectionView {
         case self.routineCollectionView:
-            return routineDatas.count
+            return wholeDatas.count
             
         default:
             return 0
@@ -250,3 +259,20 @@ extension MainRoutineViewController: UICollectionViewDataSource {
     
 }
 
+// MARK: - MainRoutineViewController - Delegate
+
+extension MainRoutineViewController: UICollectionViewDelegate {
+    
+    // 셀이 선택되기 전 호출 메서드
+    // 해당 셀의 결과값을 전환시킨다
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? RoutineCollectionViewCell else { return false }
+        let index = indexPath.item
+        var result = wholeDatas[index].result
+        result.toggle()
+        self.wholeDatas[index].result = result
+        cell.configureData(wholeDatas[index])
+        return false
+    }
+    
+}

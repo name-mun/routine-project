@@ -9,14 +9,6 @@ import Foundation
 
 // 루틴 결과
 struct RoutineResult: CustomStringConvertible {
-    var description: String {
-        """
-        [RoutineResult]
-        dateID: \(dateID)
-        routineID: \(routineID)
-        isCompleted: \(isCompleted)
-        """
-    }
     
     // 날짜ID 식별자
     let dateID: Date
@@ -26,10 +18,18 @@ struct RoutineResult: CustomStringConvertible {
     // 완료 여부
     private(set) var isCompleted: Bool
     
+    var description: String {
+        """
+        [RoutineResult]
+        dateID: \(dateID)
+        routineID: \(routineID)
+        isCompleted: \(isCompleted)
+        """
+    }
+    
     /// 미완료/완료 토글
-    mutating func toggle() -> Bool {
+    mutating func toggle() {
         self.isCompleted.toggle()
-        return isCompleted
     }
         
     init(dateID: Date,
@@ -49,14 +49,14 @@ extension RoutineResult: Equatable {
     /// 동일한 ID 인지 검증
     static func == (_ lhs: RoutineResult, _ rhs: RoutineResult) -> Bool {
         guard lhs.routineID == rhs.routineID,
-              lhs.dateID == rhs.dateID else { return false }
+              lhs.dateID.yyyyMMdd() == rhs.dateID.yyyyMMdd() else { return false }
         
         return true
     }
     
     // 날짜를 통한 검증
     func isCorrect(_ dateID: Date) -> Bool {
-        self.dateID == dateID
+        self.dateID.yyyyMMdd() == dateID.yyyyMMdd()
     }
     
 }
