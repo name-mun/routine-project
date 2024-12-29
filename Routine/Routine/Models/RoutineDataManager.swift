@@ -58,7 +58,7 @@ struct RoutineData {
     
     init(routine: Routine, at date: Date) {
         self.routine = routine
-        self.result = RoutineResult(dateID: date, routineID: routine.id)
+        self.result = RoutineResult(date: date, routineID: routine.id)
     }
     
 }

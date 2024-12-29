@@ -13,65 +13,60 @@ import CoreData
 ///
 ///CRUD 메서드 지원
 ///
-class RoutineResultManager {
+class RoutineResultManager: NSDataManager {
+    
+    typealias CoreData = RoutineResultCoreData
+    
+    var container: NSPersistentContainer? = {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return nil }
+        
+        return appDelegate.persistentContainer
+    }()
+    
+    lazy var entity: NSEntityDescription? = {
+        guard let container = self.container,
+              let entity = NSEntityDescription.entity(forEntityName: CoreData.classID, in: container.viewContext) else { return nil }
+        
+        return entity
+    }()
     
     static let shared = RoutineResultManager()
     
-    private init() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.container = appDelegate.persistentContainer
-    }
-    
-    private let container: NSPersistentContainer
-    
-    private lazy var entity = NSEntityDescription.entity(forEntityName: RoutineResultCoreData.className, in: container.viewContext)
-    
+    private init() {}
 }
 
-// MARK: - CRUD 메서드 ( + reset )
+// MARK: - CRUD 메서드
 
 extension RoutineResultManager {
     
     /// RoutineResult 를 생성 및 저장
     func create(_ routineResult: RoutineResult) {
-        do
-        {
-            let routineResultDatas = try fetchRoutineResultCoreData()
-            for routineResultData in routineResultDatas {
-                guard !routineResultData.isSame(routineResult) else { return }
-            }
-            
-        } catch {
-            
+        let routineResultDatas = fetchData()
+        for routineResultData in routineResultDatas {
+            guard !routineResultData.isSame(routineResult) else { return }
         }
-        guard let entity,
+        
+        guard let container,
+              let entity,
               let routineResultCoreData = NSManagedObject(entity: entity,
                                                           insertInto: container.viewContext)
                 as? RoutineResultCoreData else { return }
         routineResultCoreData.set(routineResult)
         
-        do {
-            try container.viewContext.save()
-        } catch let error {
-            print("creat: \(error)")
-        }
+        save()
     }
     
     /// dateID / routineID 를 통해 RoutineResult? 반환
     func read(_ dateID: Date, _ routineID: UUID) -> RoutineResult? {
-        do {
-            let routineResultCoreDatas = try fetchRoutineResultCoreData()
-            let testRoutineResult = RoutineResult(dateID: dateID, routineID: routineID)
-            
-            for routineResultCoreData in routineResultCoreDatas {
-                if routineResultCoreData.isSame(testRoutineResult),
-                   let routineResult = routineResultCoreData.convertTo() {
-                    return routineResult
-                }
+        let routineResultCoreDatas = fetchData()
+        let checker = RoutineResult(date: dateID, routineID: routineID)
+        
+        for routineResultCoreData in routineResultCoreDatas {
+            if routineResultCoreData.isSame(checker),
+               let routineResult = routineResultCoreData.convertTo() {
+                return routineResult
             }
-            
-        } catch let error {
-            print("read: \(error)")
         }
         
         return nil
@@ -79,79 +74,35 @@ extension RoutineResultManager {
     
     /// routineResults 를 통해 업데이트
     func update(_ routineResult: RoutineResult) {
-        do {
-            let routineResultCoreDatas = try fetchRoutineResultCoreData()
-            
-            for routineResultCoreData in routineResultCoreDatas {
-                if routineResultCoreData.isSame(routineResult) {
-                    routineResultCoreData.set(routineResult)
-                    return
-                }
+        let routineResultCoreDatas = fetchData()
+        
+        for routineResultCoreData in routineResultCoreDatas {
+            if routineResultCoreData.isSame(routineResult) {
+                routineResultCoreData.set(routineResult)
+                return
             }
-            
-            create(routineResult)
-            
-            try container.viewContext.save()
-        } catch let error {
-            print("update: \(error)")
         }
+        
+        create(routineResult)
+        
+        save()
     }
     
     /// routineResults 를 통해 데이터 삭제
     func delete(_ routineResult: RoutineResult) {
-        do {
-            let routineResultCoreDatas = try fetchRoutineResultCoreData()
-            routineResultCoreDatas.forEach { routineResultCoreData in
-                if routineResultCoreData.isSame(routineResult) {
-                    delete(routineResultCoreData)
-                }
+        let routineResultCoreDatas = fetchData()
+        routineResultCoreDatas.forEach { routineResultCoreData in
+            if routineResultCoreData.isSame(routineResult) {
+                deleteData(routineResultCoreData)
             }
-            try container.viewContext.save()
-        } catch let error {
-            print("reset: \(error)")
         }
+        save()
     }
     
-    /// 전체 데이터 삭제
-    func reset() {
-        do {
-            let routineResultCoreDatas = try fetchRoutineResultCoreData()
-            routineResultCoreDatas.forEach { routineResultCoreData in
-                delete(routineResultCoreData)
-            }
-            try container.viewContext.save()
-        } catch let error {
-            print("reset: \(error)")
-        }
-    }
     
     func readAll() {
-        do {
-            let routineResultCoreDatas = try fetchRoutineResultCoreData()
-            let string = routineResultCoreDatas.compactMap { $0.convertTo() }.map { String(describing: $0) }.joined(separator: "\n")
-            print(string)
-        } catch {
-            print("readAll fail")
-        }
-    }
-}
-
-// MARK: - 내부 사용 메서드
-
-extension RoutineResultManager {
-    
-    // CoreData 에서 데이터 로드
-    private func fetchRoutineResultCoreData() throws -> [RoutineResultCoreData] {
-        return try container.viewContext.fetch(RoutineResultCoreData.fetchRequest())
-    }
-    
-    // 데이터 저장
-    private func save() throws {
-        try container.viewContext.save()
-    }
-    
-    // 데이터 삭제
-    private func delete(_ routineResultCoreData: RoutineResultCoreData) {
-        container.viewContext.delete(routineResultCoreData)
+        let routineResultCoreDatas = fetchData()
+        let string = routineResultCoreDatas.compactMap { $0.convertTo() }.map { String(describing: $0) }.joined(separator: "\n")
+        print(string)
     }
 }

@@ -10,10 +10,12 @@ import Foundation
 
 import CoreData
 
+
+
 @objc(RoutineDataModel)
-public class RoutineDataModel: NSManagedObject {
+public class RoutineDataModel: NSManagedObject, IDNSManagedObject {
     
-    static let className: String = "RoutineDataModel"
+    static let classID: String = "RoutineDataModel"
     
     enum Key {
         static let routineJSONData = "routineJSONData"
