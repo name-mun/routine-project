@@ -37,6 +37,11 @@ class CreateRoutineViewController: UIViewController {
         routineEditorView.colorButton.addAction(UIAction{ [weak self] _ in
             self?.colorButtonTapped()
         }, for: .touchUpInside)
+
+        // 스티커 버튼 액션 연결
+        routineEditorView.stickerButton.addAction(UIAction{ [weak self] _ in
+            self?.stickerButtonTapped()
+        }, for: .touchUpInside)
     }
 }
 
@@ -62,6 +67,13 @@ extension CreateRoutineViewController {
         }
         present(modalVC, animated: true)
     }
+
+    // 스티커 버튼 눌리면 실행
+    private func stickerButtonTapped() {
+        let modalVC = SelectStickerViewController()
+        modalVC.delegate = self
+        present(modalVC, animated: true)
+    }
 }
 
 // MARK: - SelectColorViewController Delegate 설정
@@ -75,6 +87,15 @@ extension CreateRoutineViewController: SelectColorViewControllerDelegate {
         routineEditorView.colorButton.backgroundColor = colors
         routineEditorView.titleInputView.backgroundColor = colors
         self.selectedColorIndex = selectedIndex
+    }
+
+}
+
+// MARK: - SelectStickerViewController Delegate 설정
+
+extension CreateRoutineViewController: SelectStickerViewControllerDelegate {
+    func updateSticker(_ viewController: UIViewController, sticker: String) {
+        routineEditorView.titleInputImage.image = UIImage(systemName: sticker)
     }
 
 }
