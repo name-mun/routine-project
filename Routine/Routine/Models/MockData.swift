@@ -31,11 +31,11 @@ struct MockData {
                                             repeatation: .default,
                                             alarm: nil)
     
-    static let falseRoutineResult = RoutineResult(dateID: date,
+    static let falseRoutineResult = RoutineResult(date: date,
                                                   routineID: uuid,
                                                   isCompleted: false)
     
-    static let trueRoutineResult = RoutineResult(dateID: date,
+    static let trueRoutineResult = RoutineResult(date: date,
                                                  routineID: uuid,
                                                  isCompleted: true)
 

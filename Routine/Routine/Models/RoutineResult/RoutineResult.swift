@@ -32,11 +32,19 @@ struct RoutineResult: CustomStringConvertible {
         self.isCompleted.toggle()
     }
         
-    init(dateID: Date,
+    init(date: Date,
          routineID: RoutineID,
          isCompleted: Bool = false) {
         self.routineID = routineID
-        self.dateID = DateIDFormatter.dateID(from: dateID)
+        self.dateID = DateID(date)
+        self.isCompleted = isCompleted
+    }
+    
+    init(dateID: DateID,
+         routineID: RoutineID,
+         isCompleted: Bool = false) {
+        self.routineID = routineID
+        self.dateID = dateID
         self.isCompleted = isCompleted
     }
     
@@ -55,9 +63,9 @@ extension RoutineResult: Equatable {
     }
     
     // 날짜를 통한 검증
-    func isCorrect(_ dateID: Date) -> Bool {
-        let dateID = DateIDFormatter.dateID(from: dateID)
-        return self.dateID == dateID
+    func isCorrect(_ date: Date) -> Bool {
+        return self.dateID == DateID(date)
     }
+    
     
 }

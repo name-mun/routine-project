@@ -69,7 +69,7 @@ struct Routine: JSONCodable, CustomStringConvertible {
          alarm: Alarm? = nil) {
         
         if let stopDate {
-            self.stopDate = DateIDFormatter.dateID(from: stopDate)
+            self.stopDate = DateID(stopDate)
         } else {
             self.stopDate = nil
         }
@@ -78,14 +78,14 @@ struct Routine: JSONCodable, CustomStringConvertible {
         self.title = title
         self.color = color
         self.sticker = sticker
-        self.dateID = DateIDFormatter.dateID(from: startDate)
+        self.dateID = DateID(startDate)
         self.repeatation = repeatation
         self.alarm = alarm
     }
     
     func result(at date: Date) -> RoutineResult {
         guard let result = Self.routineResultManager.read(date, id) else {
-            return RoutineResult(dateID: date, routineID: id)
+            return RoutineResult(date: date, routineID: id)
         }
         
         return result
@@ -112,31 +112,15 @@ extension Routine: Equatable {
     
     // 생성 날짜를 통한 확인 메서드
     private func isAfterStart(_ date: Date) -> Bool {
-        let inputDate = DateIDFormatter.dateID(from: date)
+        let inputDate = DateID(date)
         return inputDate >= dateID
     }
     
     // 중단 날짜를 통한 확인 메서드
     private func isStop(_ date: Date) -> Bool {
         guard let stopDate = self.stopDate else { return false }
-        let dateID = DateIDFormatter.dateID(from: date)
+        let dateID = DateID(date)
         return dateID >= stopDate
     }
 
-}
-
-extension Date {
-    
-    func yyyyMMdd() -> String {
-        let year = Calendar.current.component(.year, from: self)
-        let month = Calendar.current.component(.month, from: self)
-        let day = Calendar.current.component(.day, from: self)
-        
-        let monthString = month < 10 ? "0" + "\(month)" : "\(month)"
-        let dayString = day < 10 ? "0" + "\(day)" : "\(day)"
-
-        let yyyyMMdd = ["\(year)", monthString, dayString].joined()
-
-        return yyyyMMdd
-    }
 }
